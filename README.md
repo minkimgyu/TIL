@@ -4,4 +4,22 @@
 
 ## 블로그
 
+<<<<<<< HEAD
 https://minkimgyu.github.io/
+=======
+https://minkimgyu.github.io/
+
+알고리즘, 객체지향 등 프로그래밍에 관한 내용을 포스팅하는 곳입니다.
+
+
+## 새롭게 추가한 공부한 것
+
+- 코딩 테스트 문제풀이
+
+1일 1문제 풀이해서 블로그에 올리는 것을 목표로 하고 있습니다.
+
+- 깃허브 관리방법
+
+https://docs.google.com/presentation/d/11Lo3JsfGQXD8OB-mMhfnuhOBu2LRgQ8CmJeAv3Bj7eg/edit#slide=id.g22c358a6a4b_0_25
+
+>>>>>>> b848e7ed29e7fc786474a17594e50546d4c6dc16
