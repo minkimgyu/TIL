@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 class PriorityQueue
@@ -140,6 +141,10 @@ int main()
 		cin >> tmp;
 		priorityQueue.Insert(tmp);
 	}
+
+	// log(n) * n
+	// m * n
+	// log(n) * n +  m * n
 
 	for (int i = 0; i < mergeCount; i++)
 	{
