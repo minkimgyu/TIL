@@ -2,11 +2,17 @@
 #include <vector>
 using namespace std;
 
-template <typename T>
+struct Item
+{
+public:
+	char value;
+	int index;
+};
+
 class Stack
 {
 public:
-	void Push(T item)
+	void Push(Item item)
 	{
 		_vec.push_back(item);
 	}
@@ -16,9 +22,10 @@ public:
 		_vec.pop_back();
 	}
 
-	bool IsEmpty()
+	Item Top()
 	{
-		return Size() == 0;
+		int size = Size();
+		return _vec[size - 1];
 	}
 
 	int Size()
@@ -26,15 +33,26 @@ public:
 		return _vec.size();
 	}
 
-	T Top()
+	Item ReturnItemUsingIndex(int index)
 	{
-		int size = Size();
-		return _vec[size - 1];
+		return _vec[index];
+	}
+
+	bool IsEmpty()
+	{
+		return Size() == 0;
 	}
 
 private:
-	vector<T> _vec;
+	vector<Item> _vec;
 };
+
+// https://www.acmicpc.net/board/view/78524
+// 위 풀이를 참고함
+
+// 스택에서 뺄 때 아래에 쌓인 값을 전부 곱해주면 되는 문제
+// 만약 괄호가 바로 닫히지 않는 경우(인덱스가 이어지지 않았을 경우) 이 경우는 계산에 넣지말고 바로 빼줘야한다.
+// 모든 계산이 끝났는데 스택에 남은 값이 있다면 입력이 잘못된 경우이므로 0를 출력해준다.
 
 int main()
 {
@@ -42,14 +60,11 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	Stack<char> charStack;
+	Stack stack;
 
-	Stack<int> sumStack;
-	Stack<int> tempStack;
+	const int size = 31;
 
-	int size = 31;
-	char* arr = new char[size];
-
+	char arr[size];
 	cin.getline(arr, size);
 
 	int sum = 0;
@@ -61,40 +76,81 @@ int main()
 
 		if (index == 0)
 		{
-			charStack.Push(arr[index]);
+			Item item;
+			item.index = index;
+			item.value = arr[index];
+
+			stack.Push(item);
 		}
 		else
 		{
-			if (charStack.IsEmpty() == false && charStack.Top() == '(' && arr[index] == ')')
+			if (stack.IsEmpty() == false && stack.Top().value == '(' && arr[index] == ')')
 			{
-				if (arr[index - 1] == '(' && arr[index] == ')') // 바로 괄호가 나오는 경우
+				if (index - stack.Top().index == 1) // 바로 이전 값인 경우만 --> 괄호가 붙어있는 경우만
 				{
+					stack.Pop();
+					int tmp = 2;
+
+					int size = stack.Size();
+					if (size > 0)
+					{
+						for (int i = 0; i < size; i++)
+						{
+							char item = stack.ReturnItemUsingIndex(i).value;
+							if (item == '(') tmp *= 2;
+							else if (item == '[') tmp *= 3;
+						}
+
+						
+					}
+
+					sum += tmp;
 				}
 				else
 				{
+					stack.Pop();
 				}
-
-				charStack.Pop();
-
 			}
-			else if (charStack.IsEmpty() == false && charStack.Top() == '[' && arr[index] == ']')
+			else if (stack.IsEmpty() == false && stack.Top().value == '[' && arr[index] == ']')
 			{
-				if (arr[index - 1] == '[' && arr[index] == ']')
+				if (index - stack.Top().index == 1) // 바로 이전 값인 경우만 --> 괄호가 붙어있는 경우만
 				{
+					stack.Pop();
+					int tmp = 3;
+
+					int size = stack.Size();
+					if (size > 0)
+					{
+						for (int i = 0; i < size; i++)
+						{
+							char item = stack.ReturnItemUsingIndex(i).value;
+							if (item == '(') tmp *= 2;
+							else if (item == '[') tmp *= 3;
+						}
+					}
+
+					sum += tmp;
 				}
 				else
 				{
+					stack.Pop();
 				}
-
 			}
 			else
 			{
-				charStack.Push(arr[index]);
+				Item item;
+				item.index = index;
+				item.value = arr[index];
+
+				stack.Push(item);
 			}
 		}
 
 		index++;
 	}
+
+	if (stack.IsEmpty() == false) cout << 0; // 만약 제대로 처리되지 않아서 남은 값이 있다면
+	else cout << sum;
 
 	return 0;
 }
