@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ad6545cc-42f9-483f-b0a1-3905e29c82d3}</ProjectGuid>
-    <RootNamespace>BubbleSort</RootNamespace>
+    <ProjectGuid>{13a8ee7a-0dad-4179-8cf1-e4e1a96fb204}</ProjectGuid>
+    <RootNamespace>My9934</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -140,17 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BubbleSort.h" />
-    <ClInclude Include="HeapSort.h" />
-    <ClInclude Include="InsertionSort.h" />
-    <ClInclude Include="MergeSort.h" />
-    <ClInclude Include="Pch.h" />
-    <ClInclude Include="Basic.h" />
-    <ClInclude Include="QuickSort.h" />
-    <ClInclude Include="SelectionSort.h" />
-    <ClInclude Include="ShellSort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

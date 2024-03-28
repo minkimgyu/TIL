@@ -1,11 +1,4 @@
-#pragma once
-
-// Stable: Yes
-// In-place: Yes
-// ¹öºí Á¤·ÄÀÇ °¡Àå Å« ÀåÁ¡: °£´ÜÇÔ, ±¸ÇöÇÏ±â ½¬¿ò, Ãß°¡ ¸Ş¸ğ¸® X
-
-// BesCase (ÃÖ¼±ÀÇ °æ¿ì) Time Complexity: O(n^2)
-// WorstCase(ÃÖ¾ÇÀÇ °æ¿ì) Time Complexity O(n^2)
+ï»¿#pragma once
 
 void BubbleSort(int* arr, int size)
 {
@@ -22,3 +15,10 @@ void BubbleSort(int* arr, int size)
 		}
 	}
 }
+
+// Stable: Yes
+// In-place: Yes
+// ë²„ë¸” ì •ë ¬ì˜ ê°€ì¥ í° ì¥ì : ê°„ë‹¨í•¨, êµ¬í˜„í•˜ê¸° ì‰¬ì›€, ì¶”ê°€ ë©”ëª¨ë¦¬ X
+
+// BestCase (ìµœì„ ì˜ ê²½ìš°) Time Complexity: O(n^2)
+// WorstCase(ìµœì•…ì˜ ê²½ìš°) Time Complexity: O(n^2)

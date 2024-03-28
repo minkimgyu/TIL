@@ -1,17 +1,10 @@
-#pragma once
-
-// Stable: No
-// In-place: Yes
-// ¼±ÅÃ Á¤·ÄÀÇ °¡Àå Å« ÀåÁ¡: °£´ÜÇÔ, ±¸ÇöÇÏ±â ½¬¿ò
-
-// BesCase (ÃÖ¼±ÀÇ °æ¿ì) Time Complexity: O(n^2)
-// WorstCase(ÃÖ¾ÇÀÇ °æ¿ì) Time Complexity O(n^2)
+ï»¿#pragma once
 
 int* SelectionSort(int* arr, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		int min = arr[i]; // ÃÖ¼Ò°ªÀ» ¼±ÅÃÇÑ´Ù.
+		int min = arr[i]; // ìµœì†Œê°’ì„ ì„ íƒí•œë‹¤.
 		int index = i;
 		for (int j = i; j < size; j++)
 		{
@@ -30,3 +23,10 @@ int* SelectionSort(int* arr, int size)
 
 	return arr;
 }
+
+// Stable: No
+// In-place: Yes
+// ì„ íƒ ì •ë ¬ì˜ ê°€ì¥ í° ì¥ì : ê°„ë‹¨í•¨, êµ¬í˜„í•˜ê¸° ì‰¬ì›€
+
+// BestCase (ìµœì„ ì˜ ê²½ìš°) Time Complexity: O(n^2)
+// WorstCase(ìµœì•…ì˜ ê²½ìš°) Time Complexity: O(n^2)

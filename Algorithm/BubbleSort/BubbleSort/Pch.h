@@ -1,26 +1,9 @@
-#pragma once
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-
-using namespace std;
-
-int* ReturnRandomArr(int size, int maxSize)
-{
-	srand((unsigned int)time(NULL));
-
-	int* arr = new int[size];
-	for (int i = 0; i < size; i++)
-		arr[i] = rand() % maxSize;
-
-	return arr;
-}
-
-void Print(int* arr, int size)
-{
-	for (int i = 0; i < size; i++)
-	{
-		if (i == size - 1) cout << arr[i] << '\n';
-		else cout << arr[i] << " ";
-	}
-}
+﻿#pragma once
+#include "Basic.h"
+#include "BubbleSort.h"
+#include "SelectionSort.h"
+#include "InsertionSort.h"
+#include "ShellSort.h"
+#include "MergeSort.h"
+#include "QuickSort.h"
+#include "HeapSort.h"

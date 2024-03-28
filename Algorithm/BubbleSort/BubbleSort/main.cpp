@@ -1,16 +1,13 @@
 ﻿#include "Pch.h"
 
-#include "BubbleSort.h"
-#include "SelectionSort.h"
-
 int main()
 {
-	const int size = 6;
-	int* arr = ReturnRandomArr(size, 10);
+	const int size = 10;
+	const int maxSize = 15;
+	int* arr = ReturnRandomArr(size, maxSize);
 
 	Print(arr, size);
 
-	SelectionSort(arr, size);
 
 	Print(arr, size);
 
