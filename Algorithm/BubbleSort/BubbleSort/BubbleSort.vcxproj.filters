@@ -32,9 +32,6 @@
     <ClInclude Include="InsertionSort.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Basic.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ShellSort.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,6 +42,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HeapSort.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RadixSort.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

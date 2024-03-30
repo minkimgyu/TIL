@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 void InsertionSortStep(int* arr, int start, int end, int gap);
 

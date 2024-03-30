@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Basic.h"
 #include "BubbleSort.h"
 #include "SelectionSort.h"
@@ -7,3 +7,4 @@
 #include "MergeSort.h"
 #include "QuickSort.h"
 #include "HeapSort.h"
+#include "RadixSort.h"
