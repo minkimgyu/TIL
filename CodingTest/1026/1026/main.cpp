@@ -4,12 +4,49 @@ using namespace std;
 
 bool ACompare(int a, int b)
 {
-	return a < b;
+	return a > b;
 }
 
 bool BCompare(int a, int b)
 {
-	return a > b;
+	return a < b;
+}
+
+void Swap(int* arr, int i, int j)
+{
+	int tmp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = tmp;
+}
+
+int Partition(int* arr, int start, int end, bool isUpOrder)
+{
+	int pivot = arr[end];
+	int index = start;
+	for (int i = start; i < end; i++)
+	{
+		bool condition;
+		if (isUpOrder) condition = arr[i] < pivot;
+		else condition = arr[i] > pivot;
+
+		if (condition)
+		{
+			Swap(arr, index, i);
+			index++;
+		}
+	}
+
+	Swap(arr, index, end);
+	return index;
+}
+
+void QuickSort(int* arr, int start, int end, bool isUpOrder)
+{
+	if (start >= end) return;
+
+	int index = Partition(arr, start, end, isUpOrder);
+	QuickSort(arr, start, index - 1, isUpOrder);
+	QuickSort(arr, index + 1, end, isUpOrder);
 }
 
 int main()
@@ -18,15 +55,11 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int* d = new int[101]{ -1 };
-
 	int n;
 	cin >> n;
 
 	int* a = new int[n];
 	int* b = new int[n];
-
-	int* c = new int[n];
 
 	for (int i = 0; i < n; i++)
 	{
@@ -35,24 +68,20 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		int tmp;
-		cin >> tmp;
-		b[i] = tmp; // 원본 값
-		c[i] = tmp;
+		cin >> b[i];
 	}
 
-	sort(a, a + n, BCompare);
-	sort(c, c + n, ACompare);
+	//sort(a, a + n, ACompare);
+	//sort(b, b + n, BCompare); 
+	// --> 정렬된 B
 
-	for (int i = 0; i < n; i++)
-	{
-		d[c[i]] = i;
-	}
+	QuickSort(a, 0, n - 1, true);
+	QuickSort(b, 0, n - 1, false);
 
 	int sum = 0;
 	for (int i = 0; i < n; i++)
 	{
-		sum += a[i] * b[d[c[i]]];
+		sum += a[i] * b[i];
 	}
 
 	cout << sum;
