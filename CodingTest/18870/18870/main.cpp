@@ -46,7 +46,6 @@ int main()
 	int* orderedArr = new int[n];
 	int* arr = new int[n];
 
-
 	unordered_map<int, int> uM;
 
 	int cnt = 0;
