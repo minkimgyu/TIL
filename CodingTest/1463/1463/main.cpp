@@ -1,5 +1,7 @@
-#include <iostream>
+﻿#include <iostream>
 using namespace std;
+
+int dp[1000001];
 
 int main()
 {
@@ -7,30 +9,30 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int x;
-	cin >> x;
+	int n;
+	cin >> n;
 
-	int cnt = 0;
-
-	while (x != 1)
+	dp[1] = 0;
+	for (int i = 2; i <= n; i++)
 	{
-		cnt++;
+		dp[i] = dp[i - 1] + 1;
 
-		if (x % 3 == 0)
+		// 나머지 연산 모두 해줘야 함
+
+		if (i % 3 == 0) // 3로 나누어 떨어지는 경우
 		{
-			x /= 3;
-			continue;
-		}
-		else
-		{
-			x -= 1;
-			continue;
+			int tmp = dp[i / 3] + 1;
+			if (dp[i] > tmp) dp[i] = tmp;
 		}
 
-		if (x / 2 == 1) x /= 2;
+		if (i % 2 == 0) // 2로 나누어 떨어지는 경우
+		{
+			int tmp = dp[i / 2] + 1; // 연산을 한번 했으므로 +1
+			if (dp[i] > tmp) dp[i] = tmp;
+		}
 	}
 
-	cout << cnt;
+	cout << dp[n];
 
 	return 0;
 }
