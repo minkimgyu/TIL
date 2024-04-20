@@ -52,7 +52,6 @@ private:
 				childIndex = rightChildIndex;
 			}
 		}
-
 	}
 
 	void PercolateUp(int index)
