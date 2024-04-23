@@ -1,42 +1,50 @@
 ﻿#include <iostream>
+#include <vector>
+#include <cmath>
 using namespace std;
+bool visit[1000002]{ false };
 
-const int maxSize = 10;
-int arr[maxSize][maxSize];
-bool visit[maxSize]{ false };
-
-void dfs(int current, int next, int cost, int cnt, int* min)
+int ReturnAfterValue(int input, int multiply)
 {
-	visit[next] = true;
-	cost += arr[current][next];
+	int sum = 1;
+	int gap = 10;
 
-	int visitCnt = 0;
-	for (int i = 0; i < cnt; i++)
+	int returnValue = 0;
+
+	while (sum < input)
 	{
-		// 이미 방문했거나 
-		if (visit[i] == true)
-		{
-			visitCnt++;
-			continue;
-		}
+		int after = sum * 10;
+		int value = (input % after - (input % sum)) / sum;
 
-		// 방문할 도시까지의 비용이 0인 경우 continue
-		// 이 경우는 제외해줘야 한다. --> visitCnt 이거 안 올림
-		if (arr[next][i] == 0)
-		{
-			continue;
-		}
+		int afterValue = 1;
+		for (int i = 0; i < multiply; i++) afterValue *= value;
+		returnValue += afterValue;
 
-		dfs(next, i, cost, cnt, min);
+		sum = after;
 	}
 
-	if (visitCnt == cnt && arr[next][0] != 0) // 모든 지점을 전부 방문한 경우에 진행
-	{
-		cost += arr[next][0];
-		if (*min > cost) *min = cost;
+	// 한번도 못 돈 경우
+	if (returnValue == 0) return input;
+	else return returnValue;
+
+	/*int next = 0;
+
+	while (input > 0) {
+		next += (int)pow(input % 10, multiply);
+		input /= 10;
 	}
 
-	visit[next] = false;
+	return next;*/
+}
+
+long long int dfs(long long int value, int p, vector<long long int>* vec)
+{
+	if (visit[value] == true) return value;
+	visit[value] = true;
+	vec->push_back(value);
+
+	int multipleValue = ReturnAfterValue(value, p);
+	return dfs(multipleValue, p, vec);
 }
 
 int main()
@@ -45,21 +53,21 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int n;
-	cin >> n;
+	int a, p;
+	cin >> a >> p;
 
-	for (int i = 0; i < n; i++)
+	vector<long long int> _vec;
+	long long int item = dfs(a, p, &_vec);
+
+	int size = _vec.size();
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < n; j++)
+		if (_vec[i] == item)
 		{
-			cin >> arr[i][j];
+			cout << i;
+			break;
 		}
 	}
 
-	int min = 1e9;
-	dfs(0, 0, 0, n, &min);
-
-	if (min == 1e9) min = 0;
-	cout << min;
 	return 0;
 }
