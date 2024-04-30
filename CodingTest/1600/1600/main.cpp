@@ -41,39 +41,54 @@ private:
 	list<T> _list;
 };
 
-const int closeCnt = 4;
-pair<int, int>* closePoints = new pair<int, int>[closeCnt]
+const int monkeyWayCnt = 4;
+pair<int, int>* monkeyPoints = new pair<int, int>[monkeyWayCnt]
 { 
 	{0, 1}, {0, -1}, {1, 0}, {-1, 0}
 };
 
-const int horseCnt = 8;
-pair<int, int>* horsePoints = new pair<int, int>[horseCnt]
+const int horseWayCnt = 8;
+pair<int, int>* horsePoints = new pair<int, int>[horseWayCnt]
 { 
 	{ 1, 2 }, { -1, 2 }, { 1, -2 }, { -1, -2 },
 	{ 2, 1 }, { 2, -1 }, { -2, 1 }, {-2, -1 } 
 };
 
-vector<pair<int, int>> ReturnClosePoint(pair<int, int> pos, pair<int, int>* closeOffset, int n, int w, int h)
-{
-	vector<pair<int, int>> closePoints;
+const int maxSize = 200;
+const int maxhorstMoveCnt = 31;
+int map[maxhorstMoveCnt][maxSize][maxSize];
 
+struct Monkey
+{
+public:
+	pair<int, int> _pos;
+	int moveCnt;
+	int horseCnt;
+};
+
+void MoveWay(Queue<Monkey>* queue, Monkey monkey, pair<int, int>* closeOffset, int n, int w, int h, bool isHorse)
+{
 	for (int i = 0; i < n; i++)
 	{
-		pair<int, int> closePoint;
-		closePoint.first = pos.first + closeOffset[i].first;
-		closePoint.second = pos.second + closeOffset[i].second;
+		Monkey nearPoint;
+		nearPoint._pos.first = monkey._pos.first + closeOffset[i].first;
+		nearPoint._pos.second = monkey._pos.second + closeOffset[i].second;
 
-		if (closePoint.first < 0 || closePoint.first >= w || closePoint.second < 0 || closePoint.second >= h) continue;
+		if (nearPoint._pos.first >= 0 && nearPoint._pos.first < w && nearPoint._pos.second >= 0 && nearPoint._pos.second < h)
+		{
+			nearPoint.moveCnt = monkey.moveCnt + 1;
 
-		closePoints.push_back(closePoint);
+			if(isHorse) nearPoint.horseCnt = monkey.horseCnt - 1;
+			else nearPoint.horseCnt = monkey.horseCnt;
+			
+
+			if (map[nearPoint.horseCnt][nearPoint._pos.second][nearPoint._pos.first] > 0) continue;
+
+			map[nearPoint.horseCnt][nearPoint._pos.second][nearPoint._pos.first] = nearPoint.moveCnt;
+			queue->Push(nearPoint);
+		}
 	}
-
-	return closePoints;
 }
-
-const int maxSize = 200;
-int map[maxSize][maxSize];
 
 int main() 
 {
@@ -87,107 +102,54 @@ int main()
 	int w, h;
 	cin >> w >> h;
 
-	for (int i = 0; i < h; i++)
+	
+	for (int y = 0; y < h; y++)
 	{
-		for (int j = 0; j < w; j++)
+		for (int x = 0; x < w; x++)
 		{
-			cin >> map[i][j];
+			int item;
+			cin >> item;
+
+			for (int z = 0; z <= k; z++)
+			{
+				map[z][y][x] = item;
+			}
 		}
 	}
+	
+	Queue<Monkey> queue;
 
-	int visit = 1;
-	Queue<pair<int, int>> queue;
+	Monkey start;
+	start._pos.first = 0;
+	start._pos.second = 0;
+	start.moveCnt = 1;
+	start.horseCnt = k;
 
-	pair<int, int> start;
-	start.first = 0;
-	start.second = 0;
-	map[start.second][start.first] = 1;
-
+	map[k][start._pos.second][start._pos.first] = start.moveCnt;
 	queue.Push(start);
 
 	while (queue.Size() > 0)
 	{
-		int queueSize = queue.Size();
-		Queue<pair<int, int>> storedQueue = queue;
-
-		for (int t = 0; t < queueSize; t++)
+		Monkey monkey = queue.Front();
+		queue.Pop();
+	
+		if (monkey._pos.first == w - 1 && monkey._pos.second == h - 1)
 		{
-			pair<int, int> pos = queue.Front();
-			queue.Pop();
-
-			int currentValue = map[pos.second][pos.first];
-
-			vector<pair<int, int>> nearPoints = ReturnClosePoint(pos, closePoints, closeCnt, w, h);
-			int nearPointsCnt = nearPoints.size();
-
-			vector<pair<int, int>> nearHorsePoints = ReturnClosePoint(pos, horsePoints, horseCnt, w, h);
-			int nearHorsePointsCnt = nearHorsePoints.size();
-
-			for (int i = 0; i < nearPointsCnt; i++)
-			{
-				int value = map[nearPoints[i].second][nearPoints[i].first];
-				if (value > 0) continue;
-
-				// 종료 조건
-				if (nearPoints[i].first == w - 1 && nearPoints[i].second == h - 1)
-				{
-					cout << currentValue;
-					return 0;
-				}
-
-				map[nearPoints[i].second][nearPoints[i].first] = currentValue + 1;
-				queue.Push(nearPoints[i]);
-			}
-			 
-			if (k <= 0) continue;
-
-			for (int i = 0; i < nearHorsePointsCnt; i++)
-			{
-				// 종료 조건
-				if (nearHorsePoints[i].first == w - 1 && nearHorsePoints[i].second == h - 1)
-				{
-					cout << currentValue;
-					return 0;
-				}
-			}
+			cout << monkey.moveCnt - 1;
+			return 0;
 		}
 
-		if (queue.Size() > 0) continue;
-		if (k <= 0) break; // 말 움직임을 진행하면 안 됨
+		// 원숭이 움직임
+		MoveWay(&queue, monkey, monkeyPoints, monkeyWayCnt, w, h, false);
 
-		queue = storedQueue;
-
-		for (int t = 0; t < queueSize; t++)
+		// 말 움직임 --> k보다 작을 때만 진행
+		if (monkey.horseCnt > 0)
 		{
-			pair<int, int> pos = queue.Front();
-			queue.Pop();
-
-			int currentValue = map[pos.second][pos.first];
-
-			vector<pair<int, int>> nearPoints = ReturnClosePoint(pos, horsePoints, horseCnt, w, h);
-			int nearPointsCnt = nearPoints.size();
-
-			for (int i = 0; i < nearPointsCnt; i++)
-			{
-				int value = map[nearPoints[i].second][nearPoints[i].first];
-				if (value > 0) continue;
-
-				// 종료 조건
-				if (nearPoints[i].first == w - 1 && nearPoints[i].second == h - 1)
-				{
-					cout << currentValue;
-					return 0;
-				}
-
-				map[nearPoints[i].second][nearPoints[i].first] = currentValue + 1;
-				queue.Push(nearPoints[i]);
-			}
+			MoveWay(&queue, monkey, horsePoints, horseWayCnt, w, h, true);
 		}
-
-		// queue에 무언가 노드가 들어온 경우를 뜻함
-		if (queue.Size() > 0) k--;
 	}
 
 	cout << -1;
+
 	return 0;
 }
