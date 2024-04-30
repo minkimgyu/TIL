@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <vector>
 #include <list>
 using namespace std;
@@ -139,10 +139,10 @@ int main()
 			return 0;
 		}
 
-		// ¿ø¼þÀÌ ¿òÁ÷ÀÓ
+		// ì›ìˆ­ì´ ì›€ì§ìž„
 		MoveWay(&queue, monkey, monkeyPoints, monkeyWayCnt, w, h, false);
 
-		// ¸» ¿òÁ÷ÀÓ --> kº¸´Ù ÀÛÀ» ¶§¸¸ ÁøÇà
+		// ë§ ì›€ì§ìž„ --> kë³´ë‹¤ ìž‘ì„ ë•Œë§Œ ì§„í–‰
 		if (monkey.horseCnt > 0)
 		{
 			MoveWay(&queue, monkey, horsePoints, horseWayCnt, w, h, true);
