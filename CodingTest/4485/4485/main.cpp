@@ -1,41 +1,136 @@
-#include <iostream>
+﻿#include <iostream>
 #include <vector>
 using namespace std;
 
-const int mapSize = 125;
-int arr[mapSize][mapSize];
-int dp[mapSize][mapSize];
+const int offsetSize = 4;
+pair<int, int> offset[offsetSize] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
 
-int offset[2]{ -1, 1 };
-
-vector<pair<int, int>> ReturnCloseNode(pair<int, int> pos, int n)
+struct Land
 {
-	vector<pair<int, int>> closeNodes;
+public:
+	int _weight;
+	pair<int, int> _pos;
+};
 
-	for (int i = 0; i < 2; i++)
+vector<Land> ReturnCloseNode(Land land, int n, int** arr)
+{
+	vector<Land> closeLands;
+
+	int currentWeight = land._weight;
+	pair<int, int> currentPos = land._pos;
+
+	for (int i = 0; i < offsetSize; i++)
 	{
-		pair<int, int> point;
-		point.first = pos.first + offset[i];
-		point.second = pos.second;
+		Land land;
+		pair<int, int> pos = { currentPos.first + offset[i].first, currentPos.second + offset[i].second };
+		
+		if (pos.first < 0 || pos.second < 0 || pos.first >= n || pos.second >= n) continue;
+		
+		land._pos = pos;
+		land._weight = currentWeight + arr[pos.second][pos.first];
 
-		if (point.first < 0 || point.second < 0 || point.first >= n || point.second >= n) continue;
-
-		closeNodes.push_back(point);
+		closeLands.push_back(land);
 	}
 
-	for (int i = 0; i < 2; i++)
-	{
-		pair<int, int> point;
-		point.first = pos.first;
-		point.second = pos.second + offset[i];
-
-		if (point.first < 0 || point.second < 0 || point.first >= n || point.second >= n) continue;
-
-		closeNodes.push_back(point);
-	}
-
-	return closeNodes;
+	return closeLands;
 }
+
+class MinHeap
+{
+public:
+	void Insert(Land land)
+	{
+		_vec.push_back(land);
+		int size = Size();
+		PercolateUp(size - 1);
+	}
+
+	Land GetMin()
+	{
+		return _vec[0];
+	}
+
+	void DeleteMin()
+	{
+		int size = Size();
+		_vec[0] = _vec[size - 1];
+		_vec.pop_back();
+
+		PercolateDown(0);
+	}
+
+	int Size()
+	{
+		return _vec.size();
+	}
+
+	bool IsEmpty()
+	{
+		return Size() == 0;
+	}
+
+private:
+	int GetParentIndex(int index) { return (int)((index - 1) / 2); }
+
+	int GetLeftChildIndex(int index) { return 2 * index + 1; }
+
+	int GetRightChildIndex(int index) { return 2 * index + 2; }
+
+	void Swap(int aIndex, int bIndex)
+	{
+		Land land = _vec[bIndex];
+		_vec[bIndex] = _vec[aIndex];
+		_vec[aIndex] = land;
+	}
+
+	void PercolateDown(int index)
+	{
+		int currentIndex = index;
+		int childIndex = GetLeftChildIndex(currentIndex);
+		int rightChildIndex = GetRightChildIndex(currentIndex);
+
+		int size = Size();
+		if (rightChildIndex < size && _vec[childIndex]._weight > _vec[rightChildIndex]._weight)
+		{
+			childIndex = rightChildIndex;
+		}
+
+		while (childIndex < size && _vec[currentIndex]._weight > _vec[childIndex]._weight)
+		{
+			Swap(currentIndex, childIndex);
+
+			currentIndex = childIndex;
+			childIndex = GetLeftChildIndex(currentIndex);
+			rightChildIndex = GetRightChildIndex(currentIndex);
+
+			if (rightChildIndex < size && _vec[childIndex]._weight > _vec[rightChildIndex]._weight)
+			{
+				childIndex = rightChildIndex;
+			}
+		}
+	}
+
+	void PercolateUp(int index)
+	{
+		int currentIndex = index;
+		int parentIndex = GetParentIndex(currentIndex);
+
+		while (parentIndex >= 0 && _vec[parentIndex]._weight > _vec[currentIndex]._weight)
+		{
+			Swap(currentIndex, parentIndex);
+
+			currentIndex = parentIndex;
+			parentIndex = GetParentIndex(currentIndex);
+		}
+	}
+
+private:
+	vector<Land> _vec;
+};
+
+// visit 필요 없음 --> 어차피 가장 작은 값을 우선해서 넣기 때문에
+// https://www.acmicpc.net/board/view/136866
+// 주변 노드를 넣을 때 거리 판단하고 넣어야함 --> 이건 수도 코드를 비슷한 내용임
 
 int main()
 {
@@ -43,61 +138,77 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	const int size = 125;
-
-	int n;
-	cin >> n;
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			int tmp; 
-			cin >> tmp;
-
-			arr[i][j] = tmp;
-			dp[i][j] = 2000;
-		}
-	}
-
-	pair<int, int> startPos;
-	startPos.first = 0;
-	startPos.second = 0;
-	dp[startPos.second][startPos.first] = arr[startPos.second][startPos.first];
-
-	int totalSum = arr[startPos.second][startPos.first]; // ���� �� �ֱ�
+	const int size = 150;
+	const int maxValue = 10000;
+	vector<int> results;
 
 	while (1)
 	{
-		vector<pair<int, int>> closeNodes = ReturnCloseNode(startPos, n);
+		int n;
+		cin >> n;
 
-		pair<int, int> storedPos;
-		int storedSum = 2000;
+		if (n == 0) break;
 
-		int size = closeNodes.size();
-		for (int i = 0; i < size; i++)
+		int** arr = new int* [n];
+		int** dp = new int* [n];
+
+		for (int i = 0; i < n; i++)
 		{
-			int sum = dp[startPos.second][startPos.first] + arr[closeNodes[i].second][closeNodes[i].first];
+			arr[i] = new int[n];
+			dp[i] = new int[n];
 
-			if (sum < dp[closeNodes[i].second][closeNodes[i].first])
-				dp[closeNodes[i].second][closeNodes[i].first] = sum;
-
-			if (closeNodes[i].first == n - 1 && closeNodes[i].second == n - 1)
+			for (int j = 0; j < n; j++)
 			{
-				cout << dp[closeNodes[i].second][closeNodes[i].first];
-				return 0;
-			}
+				int tmp;
+				cin >> tmp;
 
-			if (storedSum > sum)
-			{
-				storedSum = sum;
-				storedPos = closeNodes[i];
+				arr[i][j] = tmp;
+				dp[i][j] = maxValue;
 			}
 		}
 
-		startPos = storedPos;
+		MinHeap minHeap;
+
+		Land land;
+		land._pos = { 0, 0 };
+		land._weight = arr[0][0];
+
+		minHeap.Insert(land);
+
+		while (minHeap.IsEmpty() == false)
+		{
+			Land top = minHeap.GetMin();
+			minHeap.DeleteMin();
+
+			vector<Land> closeLands = ReturnCloseNode(top, n, arr);
+			int closeLandCnt = closeLands.size();
+			for (int i = 0; i < closeLandCnt; i++)
+			{
+				int second = closeLands[i]._pos.second;
+				int first = closeLands[i]._pos.first;
+
+				if (dp[second][first] <= closeLands[i]._weight) continue;
+
+				dp[second][first] = closeLands[i]._weight; // 여기서 값 업데이트 해주기
+				minHeap.Insert(closeLands[i]);
+			}
+		}
+
+		results.push_back(dp[n - 1][n - 1]);
+
+		for (int i = 0; i < n; i++)
+		{
+			delete[] arr[i];
+			delete[] dp[i];
+		}
 	}
 
+	int resultSize = results.size();
+	for (int i = 1; i <= resultSize; i++)
+	{
+		cout << "Problem " << i << ": " << results[i - 1];
+		if (i != resultSize) cout << '\n';
+	}
 
 	return 0;
 }
