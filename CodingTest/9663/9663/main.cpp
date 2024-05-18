@@ -21,11 +21,6 @@ void recur(int n, int y, int* cnt, int loop)
 	// x 검사
 	for (int i = 0; i < n; i++)
 	{
-		/*if (i == 0 && y == 2 && map[1] == true && map[3] == true) 
-		{
-			int tmp = 123;
-		}*/
-
 		if (map[i] == true) continue;
 
 		int leftCross = i - y + n;
