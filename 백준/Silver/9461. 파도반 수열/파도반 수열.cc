@@ -5,6 +5,8 @@ using namespace std;
 const int dpSize = 100;
 long long int dp[dpSize];
 
+// 숫자가 커지므로 long long int 값을 넣어야한다.
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -36,12 +38,7 @@ int main()
 	{
 		int tmp;
 		cin >> tmp;
-		results.push_back(dp[tmp - 1]);
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		cout << results[i];
+		cout << dp[tmp - 1];
 		if (i != n - 1) cout << '\n';
 	}
 
