@@ -18,8 +18,8 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	long long int positiveArr[50]{ 0 };
-	long long int negativeArr[50]{ 0 };
+	int positiveArr[50]{ 0 };
+	int negativeArr[50]{ 0 };
 
 	int positiveCnt = 0;
 	int negativeCnt = 0;
@@ -47,7 +47,7 @@ int main()
 	sort(positiveArr, positiveArr + positiveCnt, positiveCompare);
 	sort(negativeArr, negativeArr + negativeCnt, negativeCompare);
 
-	long long int sum = 0;
+	int sum = 0;
 
 	for (int i = 0; i < positiveCnt; i += 2)
 	{
