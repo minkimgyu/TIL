@@ -2,7 +2,7 @@
 using namespace std;
 
 // 0 ~ 9
-long long int dp[15][1005];
+int dp[10][1000];
 
 int main()
 {
@@ -29,7 +29,7 @@ int main()
 		}
 	}
 
-	long long int result = 0;
+	int result = 0;
 
 	for (int i = 0; i < 10; i++)
 	{
