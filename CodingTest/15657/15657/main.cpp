@@ -22,7 +22,8 @@ void dfs(int cnt)
 	{
 		for (int i = 0; i < items.size(); i++)
 		{
-			if (cnt > 0 && items[i] < items[cnt - 1]) continue;
+			int item = items[i];
+			if (cnt > 0 && arr[cnt - 1] > item) continue;
 
 			arr[cnt] = items[i];
 			dfs(cnt + 1);
