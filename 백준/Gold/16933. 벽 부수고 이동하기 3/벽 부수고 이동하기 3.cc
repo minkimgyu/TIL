@@ -1,77 +1,140 @@
 #include <iostream>
-#include <vector>
-#include <tuple>
+#include <string>
 #include <queue>
+#include <vector>
 #include <algorithm>
-#include <limits.h>
 using namespace std;
+
 int n, m, k;
-int graph[1001][1001];
-int v[1001][1001][11][2] = {
-    0,
+int map[1000][1000];
+int visit[2][11][1000][1000]; // 1이 낮, 0이 밤
+
+struct Point
+{
+public:
+	int x, y, breakCount, isDay;
 };
-int dir[4][2] = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
-int ans = INT_MAX;
-void funct();
+
+const int offsetCount = 4;
+pair<int, int> offset[offsetCount] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+
+int ChageDay(int day)
+{
+	if (day == 1) return 0;
+	else if (day == 0) return 1;
+}
+
+int bfs()
+{
+	if (n == 1 && m == 1 && map[0][0] == 0)
+	{
+		return 1;
+	}
+
+	bool isClear = false;
+	int minPath = -1;
+
+	queue<Point> queue;
+	queue.push({ 0, 0, 0, true});
+	visit[1][0][0][0] = 1;
+
+	while (queue.empty() == false)
+	{
+		Point point = queue.front();
+		queue.pop();
+
+		int pastPathCount = visit[point.isDay][point.breakCount][point.y][point.x];
+
+		for (int i = 0; i < offsetCount; i++)
+		{
+			int newX = point.x + offset[i].first;
+			int newY = point.y + offset[i].second;
+
+			if (newX < 0 || newX >= m || newY < 0 || newY >= n) continue;
+
+			if (newX == m - 1 && newY == n - 1)
+			{
+				minPath = pastPathCount + 1;
+				isClear = true;
+				break;
+			}
+
+			int changedDay = ChageDay(point.isDay);
+			int isWall = map[newY][newX];
+			Point newPoint;
+
+			if (point.isDay == 1) // 낮인 경우
+			{
+				if (isWall == 1 && point.breakCount < k) // 벽인 경우
+				{
+					newPoint = { newX, newY, point.breakCount + 1, changedDay };
+
+					if (visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] != 0) continue;
+
+					queue.push(newPoint);
+					visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] = pastPathCount + 1;
+				}
+				else if(isWall == 0) // 벽이 아닌 경우
+				{
+					newPoint = { newX, newY, point.breakCount, changedDay };
+
+					if (visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] != 0) continue;
+
+					queue.push(newPoint);
+					visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] = pastPathCount + 1;
+				}
+			}
+			else if (point.isDay == 0) // 밤인 경우 벽을 파괴할 수 없음 낮밤만 바꿔서 제자리에 머문다.
+			{
+				if (isWall == 0) // 벽이 아닌 경우
+				{
+					newPoint = { newX, newY, point.breakCount, changedDay };
+
+					if (visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] != 0) continue;
+
+					queue.push(newPoint);
+					visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] = pastPathCount + 1;
+				}
+				else // 벽이 있는 경우
+				{
+					newPoint = { point.x, point.y, point.breakCount, changedDay };
+
+					if (visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] != 0) continue;
+
+					queue.push(newPoint);
+					visit[newPoint.isDay][newPoint.breakCount][newPoint.y][newPoint.x] = pastPathCount + 1;
+				}
+			}
+		}
+
+		if (isClear) break;
+	}
+
+	return minPath;
+}
+
 int main()
 {
-    cin >> n >> m >> k;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            scanf("%1d", &graph[i][j]);
-        }
-    }
-    v[0][0][0][1] = 1;
-    funct();
-    if (ans == INT_MAX)
-        cout << -1 << endl;
-    else
-        cout << ans << endl;
-}
-void funct()
-{
-    queue<tuple<int, int, int, bool>> q;
-    q.push(make_tuple(0, 0, 0, 1)); // queue에는 row, col, 벽, 낮/밤 여부가 들어감. 낮은 true, 밤은 false.
-    while (!q.empty())
-    {
-        int r, c, wall;
-        bool sun;
-        tie(r, c, wall, sun) = q.front();
-        q.pop();
-        if (r == n - 1 && c == m - 1)
-        {
-            ans = min(ans, v[r][c][wall][sun]);
-            return;
-        }
-        for (int i = 0; i < 4; i++)
-        {
-            int nr = r + dir[i][0];
-            int nc = c + dir[i][1];
-            if (nr < 0 || nc < 0 || nr >= n || nc >= m)
-            { // 적절한 이동이 아니죠.
-                continue;
-            }
-            if (v[nr][nc][wall][!sun] != 0)
-            { // 처음 방문이 아니라면.
-                continue;
-            }                                                                                 
-            if (graph[nr][nc] == 1 && sun == 1 && wall + 1 <= k && v[nr][nc][wall + 1][!sun] == 0)// 벽이고, 처음방문.
-            {
-                v[nr][nc][wall + 1][!sun] = v[r][c][wall][sun] + 1;
-                q.push(make_tuple(nr, nc, wall + 1, !sun));
-            }
-            if (graph[nr][nc] == 0 && v[nr][nc][wall][!sun] == 0)
-            { // 낮,밤 상관없이 벽이 아니면 이동가능.
-                v[nr][nc][wall][!sun] = v[r][c][wall][sun] + 1;
-                q.push(make_tuple(nr, nc, wall, !sun));
-            }
-        }
-        if (sun == 0 && v[r][c][wall][!sun] == 0) //정지상황 = 밤이여야함.
-        {
-            v[r][c][wall][!sun] = v[r][c][wall][sun] + 1;
-            q.push(make_tuple(r, c, wall, !sun));
-        }
-    }
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> n >> m >> k;
+	cin.ignore();
+
+	for (int i = 0; i < n; i++)
+	{
+		string line;
+		getline(cin, line);
+		for (int j = 0; j < m; j++)
+		{
+			map[i][j] = (int)line[j] - 48;
+		}
+	}
+
+	// 밤인 경우 벽을 만났을 때 정지하는 것이 옳다.
+	// 밤이도 벽이 없다면 움직이는게 최단 거리를 구할 수 있는 방법이다.
+
+	cout << bfs();
+	return 0;
 }
