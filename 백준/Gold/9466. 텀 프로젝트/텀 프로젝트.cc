@@ -1,58 +1,90 @@
 #include <iostream>
-#include <cstdio>
-#include <vector>
-
 using namespace std;
-int pick[100001];
-int team[100001];
-int visit[100001];
-int can;
-int start;
-int cnt;
 
-void dfs(int here);
+int visitCount = 0;
+int loopCount = 100001;
 
-int main(void){
-    int t;
-    int n;
-    
-    scanf("%d", &t);
-    for(int j=0; j<t; j++){
-        scanf("%d", &n);
+int nextVisits[100001];
+int currentIndexes[100001];
 
-        for(int i=1; i<=n; i++){
-            scanf("%d", &pick[i]);
-            team[i] = 0;
-            visit[i] =0;
-        }
+bool visitAlready[100001];
 
-        cnt = 0;
-        for(int i=1; i<=n; i++){
-            
-            if(visit[i] == 0){
-                start = i;
-                can = 0;
-                dfs(i);
-            }
-        }
-        
-        printf("%d\n", n-cnt);
-    }
+void dfs(int* arr, bool* visit, int nextItem, int loopIndex)
+{
+	if (visitAlready[nextItem] == true) return;
+
+	if (nextVisits[nextItem] != 0) // 사이클을 돌아서 다시 만나는 경우
+	{
+		visitCount = loopIndex - currentIndexes[nextItem];
+		loopCount = currentIndexes[nextItem];
+		return;
+	}
+
+	if (visit[nextItem] == true) return;  // 이전에 사이클을 찾은 변수라면 리턴
+
+	nextVisits[nextItem] = arr[nextItem];
+	currentIndexes[nextItem] = loopIndex;
+	visit[nextItem] = true;
+
+	dfs(arr, visit, arr[nextItem], loopIndex + 1);
+
+	if (loopIndex < loopCount)
+	{
+		visit[nextItem] = false;
+	}
+
+	visitAlready[nextItem] = true;
+	nextVisits[nextItem] = 0;
+	currentIndexes[nextItem] = 0;
 }
 
-void dfs(int here){
-    if(visit[here] == -1 || team[here] == 1){
-        return ;
-    }
-    if(visit[here] == 0)
-        visit[here] = 1;
-    else if(visit[here] == 1){
-        team[here] = 1;
-        cnt++;
-    }
-    
-    
-    dfs(pick[here]);
-    visit[here] = -1;
-        
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int t;
+	cin >> t;
+
+	for (int i = 0; i < t; i++)
+	{
+		int n;
+		cin >> n;
+
+		int* arr = new int[n + 1];
+		bool* visit = new bool[n + 1];
+
+		for (int j = 1; j <= n; j++)
+		{
+			int item;
+			cin >> item;
+
+			arr[j] = item;
+			visit[j] = false;
+
+			nextVisits[j] = 0;
+			currentIndexes[j] = 0;
+			visitAlready[j] = false;
+		}
+
+		int resultSum = 0;
+		for (int j = 1; j <= n; j++)
+		{
+			if (visit[j] == true) continue;
+
+			dfs(arr, visit, j, 0);
+
+			resultSum += visitCount;
+			visitCount = 0;
+			loopCount = 100001;
+		}
+
+		cout << n - resultSum;
+		if (i != t - 1) cout << '\n';
+
+		delete[] arr;
+	}
+
+	return 0;
 }
