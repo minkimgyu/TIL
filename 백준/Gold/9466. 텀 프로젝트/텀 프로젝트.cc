@@ -11,7 +11,7 @@ bool visitAlready[100001];
 
 void dfs(int* arr, bool* visit, int nextItem, int loopIndex)
 {
-	if (visitAlready[nextItem] == true) return;
+	if (visitAlready[nextItem] == true) return; // 이미 방문해서 사이클이 형성되지 않는 것을 확인한 경우 리턴
 
 	if (nextVisits[nextItem] != 0) // 사이클을 돌아서 다시 만나는 경우
 	{
@@ -84,6 +84,7 @@ int main()
 		if (i != t - 1) cout << '\n';
 
 		delete[] arr;
+		delete[] visit;
 	}
 
 	return 0;
