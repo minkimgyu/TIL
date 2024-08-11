@@ -1,46 +1,49 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 using namespace std;
 
 int n, m;
-int arr[7];
-int outputs[7];
 
-void dfs(int cnt)
+const int maxSize = 8;
+int arr[maxSize];
+int inputArr[maxSize];
+
+void dfs(int count)
 {
-	if (cnt == m)
+	if (count == m)
 	{
 		for (int i = 0; i < m; i++)
 		{
-			cout << outputs[i];
+			cout << arr[i];
 			if (i != m - 1) cout << " ";
 		}
+
 		cout << '\n';
 	}
 	else
 	{
 		for (int i = 0; i < n; i++)
 		{
-			int item = arr[i];
-			outputs[cnt] = item;
-			dfs(cnt + 1);
+			arr[count] = inputArr[i];
+			dfs(count + 1);
 		}
 	}
 }
 
-
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	cin >> n >> m;
 	for (int i = 0; i < n; i++)
 	{
-		cin >> arr[i];
+		cin >> inputArr[i];
 	}
-
-	sort(arr, arr + n);
+	
+	sort(inputArr, inputArr + n);
 
 	dfs(0);
-
 	return 0;
 }
