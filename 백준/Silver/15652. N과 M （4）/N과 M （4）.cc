@@ -2,36 +2,43 @@
 using namespace std;
 
 int n, m;
-int arr[10];
+const int maxSize = 9;
+int arr[maxSize];
 
-void dfs(int cnt)
+void dfs(int count)
 {
-	if (m == cnt)
+	if(count == m)
 	{
 		for (int i = 0; i < m; i++)
 		{
 			cout << arr[i];
-			if (i != m) cout << " ";
+			if (i != m - 1)
+			{
+				cout << " ";
+			}
 		}
+
 		cout << '\n';
 	}
 	else
 	{
 		for (int i = 1; i <= n; i++)
 		{
-			if (cnt > 0 && i < arr[cnt - 1]) continue;
+			if (count >= 1 && arr[count - 1] > i) continue;
 
-			arr[cnt] = i;
-			dfs(cnt + 1);
+			arr[count] = i;
+			dfs(count + 1);
 		}
 	}
 }
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	cin >> n >> m;
-
 	dfs(0);
-
 	return 0;
 }
