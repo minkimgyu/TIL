@@ -2,16 +2,22 @@
 using namespace std;
 
 int n, m;
-int arr[10];
+
+const int maxSize = 8;
+int arr[maxSize];
+bool visit[maxSize];
 
 void dfs(int count)
 {
 	if (count == m)
 	{
-		for (int i = 0; i < m; i++)
+		for (int i = 0; i < count; i++)
 		{
 			cout << arr[i];
-			if (i != m - 1) cout << " ";
+			if (i != count - 1)
+			{
+				cout << ' ';
+			}
 		}
 		cout << '\n';
 	}
@@ -27,7 +33,12 @@ void dfs(int count)
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	cin >> n >> m;
 	dfs(0);
+
 	return 0;
 }
