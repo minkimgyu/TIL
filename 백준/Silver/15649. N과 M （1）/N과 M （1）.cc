@@ -1,42 +1,53 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
-bool visit[10]{ false, };
-int arr[10]{ false, };
+int n, m;
+const int maxM = 9;
 
-void dfs(int cnt, int n, int m)
+int arr[maxM];
+bool visit[maxM];
+
+int current = 1;
+
+void dfs(int count)
 {
-	if (cnt == m)
+	if (count == m)
 	{
-		for (int i = 0; i < m; i++)
+		for (int i = 0; i < count; i++)
 		{
 			cout << arr[i];
-			if(i != m - 1) cout << " ";
+			if (i != m - 1)
+			{
+				cout << " ";
+			}
 		}
+
 		cout << '\n';
+		return;
 	}
 	else
 	{
 		for (int i = 1; i <= n; i++)
 		{
-			if (visit[i] == false)
-			{
-				visit[i] = true;
-				arr[cnt] = i;
-				dfs(cnt + 1, n, m);
-				visit[i] = false;
-			}
-		}
+			if (visit[i] == true) continue;
 
+			visit[i] = true;
+			arr[count] = i;
+
+			dfs(count + 1);
+			visit[i] = false;
+		}
 	}
 }
 
 int main()
 {
-	int n, m;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	cin >> n >> m;
-	dfs(0, n, m);
+	dfs(0);
 
 	return 0;
 }
