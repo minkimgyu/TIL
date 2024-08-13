@@ -16,7 +16,6 @@ void dfs(int count)
 	{
 		for (int i = 0; i < m; i++)
 		{
-			// 여기서 배열을 map에 넣기
 			cout << arr[i];
 			if (i != m - 1) cout << " ";
 		}
