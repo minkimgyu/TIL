@@ -2,32 +2,45 @@
 #include <algorithm>
 using namespace std;
 
-int arr[1000001];
+int dp[1000001];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int n;
 	cin >> n;
 
-	for (int i = 1; i < n; i++)
+	dp[1] = 0;
+	dp[2] = 1;
+	dp[3] = 1;
+	dp[4] = 2;
+	dp[5] = 3;
+
+
+	for (int i = 6; i <= n; i++)
 	{
-		if (i * 2 <= 1000000 && (arr[i * 2] == 0 || min(arr[i * 2], arr[i] + 1) == arr[i] + 1))
+		if (i % 2 == 0 && i % 3 == 0)
 		{
-			arr[i * 2] = arr[i] + 1;
+			dp[i] = min(min(dp[i / 3], dp[i / 2]), dp[i - 1]) + 1;
 		}
-
-		if (i * 3 <= 1000000 && (arr[i * 3] == 0 || min(arr[i * 3], arr[i] + 1) == arr[i] + 1))
+		else if (i % 2 == 0)
 		{
-			arr[i * 3] = arr[i] + 1;
+			dp[i] = min(dp[i - 1], dp[i / 2]) + 1;
 		}
-
-		if (i + 1 <= 1000000 && (arr[i + 1] == 0 || min(arr[i + 1], arr[i] + 1) == arr[i] + 1))
+		else if (i % 3 == 0)
 		{
-			arr[i + 1] = arr[i] + 1;
+			dp[i] = min(dp[i - 1], dp[i / 3]) + 1;
+		}
+		else
+		{
+			dp[i] = dp[i - 1] + 1;
 		}
 	}
 
-	cout << arr[n];
+	cout << dp[n];
 
 	return 0;
 }
