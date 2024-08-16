@@ -3,44 +3,34 @@
 using namespace std;
 
 string input;
-bool switchArr[100];
+bool check[100];
 
-void dfs(int start, int end, string part)
+void dfs(int start, int end)
 {
 	if (start > end) return;
 
-	char startAlpha = part[start];
-	char minIndex = start;
+	char min = input[start];
+	int minIndex = start;
 
 	for (int i = start; i <= end; i++)
 	{
-		if (startAlpha > part[i])
+		if (input[i] < min)
 		{
-			startAlpha = part[i];
+			min = input[i];
 			minIndex = i;
 		}
 	}
 
-	switchArr[minIndex] = true;
-
-	int inputSize = input.size();
-	for (int i = 0; i < inputSize; i++)
+	check[minIndex] = true;
+	for (int i = 0; i < input.size(); i++)
 	{
-		if (switchArr[i] == true)
-		{
-			cout << input[i];
-		}
+		if (check[i] == false) continue;
+		cout << input[i];
 	}
-
 	cout << '\n';
 
-	// 사전순으로 가장 빠른 원소를 뽑고
-	// 다음으로 올 문자는 위 문자 뒤에 있는 문자로 해야함
-
-	// 가장 빠른 원소부터 뽑기 때문에 그런 것임
-
-	dfs(minIndex + 1, end, part); // --> 그래서 뒤부터 재귀를 돌려준다.
-	dfs(start, minIndex - 1, part);
+	dfs(minIndex + 1, end);
+	dfs(start, minIndex - 1);
 }
 
 int main()
@@ -50,6 +40,7 @@ int main()
 	cout.tie(NULL);
 
 	getline(cin, input);
-	dfs(0, input.size() - 1, input);
+
+	dfs(0, input.size() - 1);
 	return 0;
 }
