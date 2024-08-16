@@ -9,7 +9,7 @@ void dfs(int start, int end)
 {
 	if (start > end) return;
 
-	char min = input[start];
+	char min = 'Z';
 	int minIndex = start;
 
 	for (int i = start; i <= end; i++)
