@@ -3,12 +3,10 @@
 using namespace std;
 
 int n, m;
+bool visit[9];
+int inputArr[9];
 
-const int maxSize = 15;
-int arr[maxSize];
-int inputArr[maxSize];
-
-bool visit[maxSize];
+int arr[9];
 
 void dfs(int count)
 {
@@ -19,21 +17,20 @@ void dfs(int count)
 			cout << arr[i];
 			if (i != m - 1) cout << " ";
 		}
-
 		cout << '\n';
 	}
 	else
 	{
-
-		int item = 0;
+		int item = -1;
 		for (int i = 0; i < n; i++)
 		{
-			if (visit[i] == true) continue;
 			if (item == inputArr[i]) continue;
-
+			if (visit[i] == true) continue;
 			visit[i] = true;
+
 			item = arr[count] = inputArr[i];
 			dfs(count + 1);
+
 			visit[i] = false;
 		}
 	}
@@ -53,6 +50,5 @@ int main()
 
 	sort(inputArr, inputArr + n);
 	dfs(0);
-
 	return 0;
 }
