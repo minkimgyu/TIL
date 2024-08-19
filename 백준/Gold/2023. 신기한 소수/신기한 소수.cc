@@ -20,8 +20,10 @@ void dfs(int number)
 	// 엣지 케이스 추가 처리 필요함
 	if (n == 1) cout << number << '\n';
 
-	for (int i = 0; i <= 9; i++)
+	for (int i = 1; i <= 9; i++)
 	{
+		if (i == 2) continue;
+
 		int numberMulti = number * 10;
 		numberMulti += i;
 
