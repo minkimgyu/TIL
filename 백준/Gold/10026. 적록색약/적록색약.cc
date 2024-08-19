@@ -25,7 +25,7 @@ int bfs(char map[maxSize][maxSize])
 	{
 		for (int j = 0; j < n; j++)
 		{
-			if (map[i][j] != 'R' && map[i][j] != 'G' && map[i][j] != 'B') continue;
+			if (map[i][j] == 'C') continue;
 
 			count += 1;
 			char currentChar = map[i][j];
