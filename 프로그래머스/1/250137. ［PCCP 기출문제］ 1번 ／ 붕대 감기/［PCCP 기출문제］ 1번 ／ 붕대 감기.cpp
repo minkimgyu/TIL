@@ -8,55 +8,48 @@ const int maxTime = 1000;
 int solution(vector<int> bandage, int health, vector<vector<int>> attacks) {
     int answer = 0;
     
-    int maxContinueHeal = bandage[0];
-    int continueHeal = 0;
+    int executeTime = bandage[0];
+    int healPoint = bandage[1];
     int additionalHealPoint = bandage[2];
     
-    int healPoint = bandage[1];
-    
-    int maxHP = health;
-    int hp = maxHP;
-    
+    int multiSuccess = 0;
     int attackIndex = 0;
-    int maxAttackCount = attacks.size();
+    
+    int maxHp = health;
+    int hp = health;
     
     for(int i = 0; i <= maxTime; i++)
     {
-        int closeAttackTime = attacks[attackIndex][0];
-        
-        if(closeAttackTime == i)
+        if(i == attacks[attackIndex][0])
         {
-            int closeAttackDamage = attacks[attackIndex][1];
-            hp -= closeAttackDamage;
+            hp -= attacks[attackIndex][1];
+            multiSuccess = 0;
+            
             if(hp <= 0)
             {
                 answer = -1;
-                break;
+                return answer;
             }
             
-            continueHeal = 0;
-            // 공격 기능 추가
             attackIndex++;
-            if(attackIndex == maxAttackCount)
+            if(attackIndex == attacks.size())
             {
                 answer = hp;
-                break;
+                return answer;
             }
         }
         else
         {
             hp += healPoint;
             
-            continueHeal++;
-            if(continueHeal == maxContinueHeal)
+            multiSuccess++;
+            if(multiSuccess == executeTime)
             {
                 hp += additionalHealPoint;
-                continueHeal = 0;
+                multiSuccess = 0;
             }
             
-            if(hp > maxHP) hp = maxHP;
+            if(hp > maxHp) hp = maxHp;
         }
     }
-    
-    return answer;
 }
