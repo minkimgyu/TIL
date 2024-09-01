@@ -3,7 +3,7 @@ using namespace std;
 
 int n, r, c;
 
-long long int visitCount;
+int visitCount;
 
 
 // (0, 0) (0, 1), (0, 2), (0, 3)
@@ -14,7 +14,7 @@ long long int visitCount;
 // 시간 초과 ㅠㅠ
 // 전부 탐색하지 마시고 사각형을 4개로 나눠 위치에 따라서 한 사분면을 선택해 나가면서 재귀해보세요
 
-void dfs(pair<int, int> leftTop, pair<int, int> rightBottom, long long int size, long long int multi)
+void dfs(pair<int, int> leftTop, pair<int, int> rightBottom, int size, int multi)
 {
 	visitCount += size * size * multi;
 	// 한 칸으로 떨어질 경우
