@@ -1,13 +1,15 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
-bool compare(string a, string b)
-{
-	return a.compare(b) > 0;
-}
+// map의 경우 key만 정렬 가능함
+struct compare {
+	bool operator() (string a, string b) const {
+		// 동작은 하나 에러 발생 가능. 자세한 내용은 밑에 기술함
+		return a.compare(b) > 0;
+	}
+};
 
 int main()
 {
@@ -16,7 +18,7 @@ int main()
 	cout.tie(NULL);
 
 	vector<string> names;
-	map<string, bool> checkEnter;
+	map<string, bool, compare> checkEnter;
 
 	int n;
 	cin >> n;
@@ -40,16 +42,9 @@ int main()
 	{
 		if (it->second == true)
 		{
-			names.push_back(it->first);
+			cout << it->first;
+			if (it != --checkEnter.end()) cout << '\n';
 		}
-	}
-
-	sort(names.begin(), names.end(), compare);
-
-	for (int i = 0; i < names.size(); i++)
-	{
-		cout << names[i];
-		if (i != names.size() - 1) cout << '\n';
 	}
 
 	return 0;
