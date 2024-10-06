@@ -31,7 +31,7 @@ void dfs(int count, string words)
                 bool isCorrect = true;
                 for(int j = 0; j < words.size(); j++)
                 {
-                    // cout << arr[j] << " ";
+                    cout << arr[j] << " ";
 
                     if(words[j] != arr[j])
                     {
@@ -47,7 +47,6 @@ void dfs(int count, string words)
             }
              
             dfs(count + 1, words);
-            arr[count] = 'Z';
         }
     }
 }
