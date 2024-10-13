@@ -5,6 +5,9 @@
 
 using namespace std;
 
+// 이 방법은 100,000 루프를 돌려야 하기 때문에
+// signal: segmentation fault (core dumped) 에러가 나온다
+
 //bool compare(string a, string b)
 //{
 //    int maxStringSize = max(a.size(), b.size());
@@ -27,10 +30,17 @@ using namespace std;
 //    return true;
 //}
 
+// 그래서 아래 방법으로 해야한다.
 bool compare(string a, string b)
 {
     return (a + b).compare(b + a) > 0;
 }
+
+// a = 6
+// b = 10
+
+// 6 + 10 --> 610
+// 10 + 6 --> 106
 
 vector<string> numStringArr;
 
