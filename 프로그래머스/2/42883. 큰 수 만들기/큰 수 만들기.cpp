@@ -3,6 +3,12 @@
 #include <stack>
 #include <iostream>
 
+
+// dfs로 분할 탐색 시 시간 복잡도 문제로 안 됨
+// 탑 높이 구하는 문제처럼 Stack으로 남기는 개수만큼 두고 앞보다 뒤 숫자가 더 크면 빼버린다.
+// Reverse 후 길이 계산 필요함
+
+
 using namespace std;
 
 stack<int> st;
