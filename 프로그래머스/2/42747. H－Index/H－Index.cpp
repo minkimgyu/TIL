@@ -23,9 +23,9 @@ int solution(vector<int> citations) {
         int leftCount = citationsSize - i + 1;
         if(i + 1 >= citations[i])
         {
+            
+            // 예시와 달리 i가 citations[i]보다 더 클 수 있고 이 때문에 최대값을 구해서 리턴해야한다.
             return max(citations[i], i);
         }
     }
-    
-    return citations.size();
 }
