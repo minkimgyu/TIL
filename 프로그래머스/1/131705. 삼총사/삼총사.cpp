@@ -6,14 +6,13 @@ using namespace std;
 int solution(vector<int> number) {
     int answer = 0;
     
-    int numberSize = number.size();
-    for(int i = 0; i < numberSize; i++)
+    for(int i = 0; i < number.size(); i++)
     {
-        for(int j = 0; j < i; j++)
+        for(int j = i + 1; j < number.size(); j++)
         {
-            for(int k = 0; k < j; k++)
+            for(int k = j + 1; k < number.size(); k++)
             {
-                int sum = number[i] + number[j] + number[k];
+                int sum =number[i] + number[j] + number[k];
                 if(sum == 0) answer++;
             }
         }
