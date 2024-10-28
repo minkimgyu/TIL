@@ -1,24 +1,24 @@
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
-int recur(int a, int b, int count)
+// 2 -> 1
+int recursive(int a, int b, int n)
 {
-    if (count < a) return 0;
+    // n이 a보다 작은 경우 더 이상 나눠질 수 없음
+    if(n < a) return 0;
     
-    int divide = count / a;
-    int mod = count % a;
+    int convertCount = (n / a) * b;
+    int leftCount = n % a; // 나머지 개수
     
-    int getBottleCount = divide * b;
-    
-    return getBottleCount + recur(a, b, getBottleCount + mod);
+    return convertCount + recursive(a, b, convertCount + leftCount);
 }
 
 int solution(int a, int b, int n) {
     int answer = 0;
     
-    answer = recur(a, b, n);
-    
+    answer = recursive(a, b, n);
     return answer;
 }
