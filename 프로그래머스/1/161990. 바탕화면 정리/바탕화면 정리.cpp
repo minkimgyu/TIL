@@ -1,41 +1,35 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 vector<int> solution(vector<string> wallpaper) {
     vector<int> answer;
     
-    // 가장 왼쪽 가장 오른쪽 가장 위쪽 가장 아래쪽 좌표를 구하자
+    pair<int, int> leftTop = {50, 50};
+    pair<int, int> rightBottom = {0, 0};
     
-    int minRow = 51;
-    int minCol = 51;
-    
-    int maxRow = -1;
-    int maxCol = -1;
-
-    
-    for(int r = 0; r < wallpaper.size(); r++)
+    for(int i = 0; i < wallpaper.size(); i++)
     {
-        for(int c = 0; c < wallpaper[r].size(); c++)
+        for(int j = 0; j < wallpaper[i].size(); j++)
         {
-            char item = wallpaper[r][c];
-            if(item == '#')
+            if(wallpaper[i][j] == '#')
             {
-                if(minRow > r) minRow = r;
-                if(minCol > c) minCol = c;
+                leftTop.first = min(leftTop.first, i);
+                leftTop.second = min(leftTop.second, j);
                 
-                if(maxRow < r + 1) maxRow = r + 1;
-                if(maxCol < c + 1) maxCol = c + 1;
+                rightBottom.first = max(rightBottom.first, i + 1);
+                rightBottom.second = max(rightBottom.second, j + 1);
             }
         }
     }
     
-    answer.push_back(minRow);
-    answer.push_back(minCol);
+    answer.push_back(leftTop.first);
+    answer.push_back(leftTop.second);
     
-    answer.push_back(maxRow);
-    answer.push_back(maxCol);
+    answer.push_back(rightBottom.first);
+    answer.push_back(rightBottom.second);
     
     return answer;
 }
