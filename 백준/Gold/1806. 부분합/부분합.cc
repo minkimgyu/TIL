@@ -4,7 +4,7 @@ using namespace std;
 int n, s;
 
 const int maxSize = 100000;
-long long int arr[maxSize];
+int arr[maxSize];
 
 //  "이 수열에서 연속된 수들의 부분합 중에 그 합이 S 이상이 되는 것 중"
 // 이 문제는 정렬하면 안 된다.
@@ -24,7 +24,7 @@ int main()
 	int start = -1;
 	int end = -1;
 
-	long long int  sum = 0;
+	int  sum = 0;
 	int minLength = maxSize;
 	int resultLength = 0;
 
