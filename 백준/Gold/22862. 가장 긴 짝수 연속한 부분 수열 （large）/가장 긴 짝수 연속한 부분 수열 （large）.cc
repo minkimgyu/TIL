@@ -34,7 +34,7 @@ int main()
 	}
 
 	if (arr[end] % 2 != 0) oddCount++; // 0번째 값이 홀수이면 oddCount를 1 더해준다.
-	//else result = 1; // 아니면 부분 수열의 길이가 최소 1 이상이라는 소리임
+	else result = 1; // 아니면 부분 수열의 길이가 최소 1 이상이라는 소리임
 
 	while (start < n)
 	{
