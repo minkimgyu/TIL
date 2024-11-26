@@ -46,27 +46,10 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		int start, end, mid, target;
-
-		target = inputArr[i];
-		start = 0;
-		end = vec.size();
-
-		while (start < end)
-		{
-			mid = (start + end) / 2;
-			if (vec[mid] >= target)
-			{
-				end = mid;
-			}
-			else
-			{
-				start = mid + 1;
-			}
-		}
-
+		vector<int>::iterator iter = lower_bound(vec.begin(), vec.end(), inputArr[i]);
+		
 		// start가 인덱스
-		cout << start;
+		cout << std::distance(std::begin(vec), iter);;
 		if (i != n - 1) cout << " ";
 	}
 
