@@ -1,16 +1,11 @@
 #include <iostream>
-#include <queue>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
-int n, k;
-
-long long int result = 0;
-priority_queue<long long int> pQ;
-
-bool compareJu(pair<int, int> a, pair<int, int> b)
+bool compare(pair<int, int> a, pair<int, int> b)
 {
-	return a.first < b.first;
+	return a.first < b.first; // 무게 순으로 정렬
 }
 
 int main()
@@ -19,43 +14,49 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
+	int n, k;
 	cin >> n >> k;
 
-	int* bags = new int[k];
-	pair<int, int>* ju = new pair<int, int>[n];
+	long long int maxValue = 0;
+
+	priority_queue<int> maxQ;
+	vector<pair<int, int>> items;
 
 	for (int i = 0; i < n; i++)
 	{
-		cin >> ju[i].first >> ju[i].second;
+		int m, v;
+		cin >> m >> v;
+		items.push_back({m, v});
 	}
 
+	sort(items.begin(), items.end(), compare);
+
+	vector<int> bags;
 	for (int i = 0; i < k; i++)
 	{
-		cin >> bags[i];
+		int kg;
+		cin >> kg;
+		bags.push_back(kg);
 	}
 
-	sort(bags, bags + k);
-	sort(ju, ju + n, compareJu);
+	sort(bags.begin(), bags.end());
 
-	int juIndex = 0;
+	int itemIndex = 0;
 
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < bags.size(); i++)
 	{
-		while (juIndex < n && ju[juIndex].first <= bags[i])
+		while (itemIndex < items.size() && items[itemIndex].first <= bags[i])
 		{
-			pQ.push(ju[juIndex].second);
-			juIndex++;
+			maxQ.push(items[itemIndex].second);
+			itemIndex++;
 		}
 
-		if (pQ.empty() == true) continue;
+		if (maxQ.empty() == true) continue; // 큐가 비면 종료하는 것이 아니라 다음 가방을 봐야한다.
 
-		result += pQ.top();
-		pQ.pop();
+		int front = maxQ.top(); maxQ.pop();
+		maxValue += front;
 	}
-	
-	cout << result;
 
-	delete[] bags;
-	delete[] ju;
+	cout << maxValue;
 	return 0;
 }
