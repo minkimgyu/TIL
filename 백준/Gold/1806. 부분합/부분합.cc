@@ -1,13 +1,9 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-int n, s;
-
-const int maxSize = 100000;
+const int maxSize = 100000 + 5;
 int arr[maxSize];
-
-//  "이 수열에서 연속된 수들의 부분합 중에 그 합이 S 이상이 되는 것 중"
-// 이 문제는 정렬하면 안 된다.
 
 int main()
 {
@@ -15,48 +11,36 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
+	int n, s;
 	cin >> n >> s;
+
 	for (int i = 0; i < n; i++)
 	{
 		cin >> arr[i];
 	}
 
-	int start = -1;
-	int end = -1;
+	int en = 0;
+	int tot = arr[0];
+	int result = 2000000000 + 5;
 
-	int  sum = 0;
-	int minLength = maxSize;
-	int resultLength = 0;
+	//sort(arr, arr + n);
 
-	while (start < n)
+	for (int st = 0; st < n; st++)
 	{
-		if (sum < s && end < n - 1)
+		while (en < n && tot < s)
 		{
-			resultLength++;
-			end++;
-			sum += arr[end];
-		}
-		else 
-		{
-			resultLength--;
-			start++;
-			sum -= arr[start];
-		}
+			en++;
 
-		if (sum >= s && minLength > resultLength)
-		{
-			minLength = resultLength;
+			if (en != n) tot += arr[en];
 		}
+		if (en == n) break;
+
+		result = min(result, en - st + 1);
+		tot -= arr[st];
 	}
 
-	if (minLength == maxSize)
-	{
-		cout << 0;
-	}
-	else
-	{
-		cout << minLength;
-	}
+	if (result == 2000000000 + 5) cout << 0;
+	else cout << result;
 
 	return 0;
 }
