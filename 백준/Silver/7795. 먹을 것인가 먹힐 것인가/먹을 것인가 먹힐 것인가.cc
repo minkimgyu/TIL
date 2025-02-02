@@ -2,13 +2,11 @@
 #include <algorithm>
 using namespace std;
 
-int arrA[20000];
-int arrB[20000];
+const int maxSize = 20000 + 5;
+int arrA[maxSize];
+int arrB[maxSize];
 
-bool compare(int a, int b)
-{
-	return a > b;
-}
+int n, m;
 
 int main()
 {
@@ -18,10 +16,8 @@ int main()
 
 	int t;
 	cin >> t;
-
 	for (int i = 0; i < t; i++)
 	{
-		int n, m;
 		cin >> n >> m;
 
 		for (int j = 0; j < n; j++)
@@ -34,38 +30,17 @@ int main()
 			cin >> arrB[j];
 		}
 
-		sort(arrA, arrA + n, compare);
-		sort(arrB, arrB + m, compare);
-
-		int aIndex = 0;
-		int bIndex = 0;
+		sort(arrB, arrB + m);
 		int result = 0;
 
-		while (1)
+		for (int k = 0; k < n; k++)
 		{
-			if (aIndex == n || bIndex == m)
-			{
-				break;
-			}
-			else
-			{
-				if (arrA[aIndex] > arrB[bIndex])
-				{
-					result += m - bIndex;
-					aIndex++;
-				}
-				else
-				{
-					bIndex++;
-				}
-			}
+			int item = arrA[k];
+			result += lower_bound(arrB, arrB + m, item) - arrB;
 		}
 
 		cout << result;
 		if (i != t - 1) cout << '\n';
-
-		fill(arrA, arrA + n, 0);
-		fill(arrB, arrB + m, 0);
 	}
 
 	return 0;
