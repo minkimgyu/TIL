@@ -45,7 +45,14 @@ int main()
 			int num;
 			cin >> num;
 
-			arr[num - 1] = 1 ^ arr[num - 1];
+			if (arr[num - 1] == 0)
+			{
+				arr[num - 1] = 1;
+			}
+			else if (arr[num - 1] == 1)
+			{
+				arr[num - 1] = 0;
+			}
 		}
 		else if (s == "all")
 		{
