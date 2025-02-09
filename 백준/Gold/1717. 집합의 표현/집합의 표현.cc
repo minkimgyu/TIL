@@ -7,7 +7,7 @@ int arr[maxSize];
 int find(int x)
 {
 	if (arr[x] < 0) return x;
-	return x = find(arr[x]);
+	return arr[x] = find(arr[x]);
 }
 
 bool uni(int u, int v)
