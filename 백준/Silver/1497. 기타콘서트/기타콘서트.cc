@@ -1,11 +1,8 @@
 #include <iostream>
 #include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-const int maxSize = 50 + 5;
-long long int states[maxSize];
+long long int states[10 + 5];
 
 int main()
 {
@@ -18,22 +15,22 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		string s, yAndN;
-		cin >> s >> yAndN;
+		string name, playable;
+		cin >> name >> playable;
 
-		for (int j = m - 1; j > -1; j--)
+		for (int j = 0; j < m; j++)
 		{
-			states[i] = (states[i] << 1) | (yAndN[j] == 'Y');
+			states[i] = (states[i] << 1) | (playable[j] == 'Y');
 		}
 	}
 
-	int result = -1; // 최대 10개까지 선택 가능
 	long long int storedState = 0;
+	int result = -1;
 
 	for (int i = 0; i < (1 << n); i++)
 	{
-		int pickCount = 0;
 		long long int state = 0;
+		int pickCount = 0;
 
 		for (int j = 0; j < n; j++)
 		{
@@ -44,17 +41,18 @@ int main()
 			}
 		}
 
-		if (storedState < state) // 더 많이 연주할 수 있는 경우
+		if (storedState < state) // 플레이 할 수 있는 곡 수가 더 많다면
 		{
 			storedState = state;
 			result = pickCount;
 		}
-		else if (storedState == state && result > pickCount) // 연주할 수 있는 노래 개수는 같지만 선택한 기타 개수가 적은 경우
+		else if(storedState == state && pickCount < result)
 		{
 			result = pickCount;
 		}
 	}
 
 	cout << result;
+
 	return 0;
 }
