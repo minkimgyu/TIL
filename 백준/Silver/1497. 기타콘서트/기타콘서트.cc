@@ -2,7 +2,10 @@
 #include <string>
 using namespace std;
 
-long long int states[10 + 5];
+long long int states[10];
+
+// 5 * 4  int 20
+// int 5
 
 int main()
 {
@@ -24,8 +27,8 @@ int main()
 		}
 	}
 
-	long long int storedState = 0;
 	int result = -1;
+	long long int storedState = 0;
 
 	for (int i = 0; i < (1 << n); i++)
 	{
@@ -41,12 +44,12 @@ int main()
 			}
 		}
 
-		if (storedState < state) // 플레이 할 수 있는 곡 수가 더 많다면
+		if (storedState < state)
 		{
 			storedState = state;
 			result = pickCount;
 		}
-		else if(storedState == state && pickCount < result)
+		else if (storedState == state && pickCount < result)
 		{
 			result = pickCount;
 		}
