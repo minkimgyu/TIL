@@ -1,27 +1,26 @@
 #include <iostream>
 using namespace std;
 
-pair<long long int, long long int> dp[90];
+const int maxSize = 90 + 5;
+long long int dp[maxSize];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int n;
 	cin >> n;
 
-	// first가 0 second가 1
+	dp[1] = 1;
+	dp[2] = 1;
 
-	dp[0].first = 0;
-	dp[0].second = 1;
-
-	for (int i = 1; i < n; i++)
+	for (int i = 3; i <= n; i++)
 	{
-		dp[i].first += dp[i - 1].first;
-		dp[i].second += dp[i - 1].first;
-
-		dp[i].first += dp[i - 1].second;
+		dp[i] = dp[i - 1] + dp[i - 2];
 	}
 
-	cout << dp[n - 1].first + dp[n - 1].second;
-
+	cout << dp[n];
 	return 0;
 }
