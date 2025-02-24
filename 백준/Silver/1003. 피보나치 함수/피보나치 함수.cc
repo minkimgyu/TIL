@@ -1,32 +1,32 @@
 #include <iostream>
 using namespace std;
 
-int zeroCount = 0;
-int oneCount = 0;
-
-const int maxFiboCount = 41;
-pair<int, int> dp[maxFiboCount];
+const int maxSize = 40 + 5;
+pair<int, int> dp[maxSize];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int t;
+	cin >> t;
+
 	dp[0] = { 1, 0 };
 	dp[1] = { 0, 1 };
 
-	for (int i = 2; i < maxFiboCount; i++)
+	for (int i = 2; i < maxSize; i++)
 	{
-		dp[i].first = dp[i - 1].first + dp[i - 2].first;
-		dp[i].second = dp[i - 1].second + dp[i - 2].second;
+		dp[i] = { dp[i - 1].first + dp[i - 2].first, dp[i - 1].second + dp[i - 2].second };
 	}
 
-	int n;
-	cin >> n;
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < t; i++)
 	{
-		int item;
-		cin >> item;
-
-		cout << dp[item].first << " " << dp[item].second;
-		if (i != n - 1) cout << '\n';
+		int n;
+		cin >> n;
+		cout << dp[n].first << " " << dp[n].second;
+		if (i != t - 1) cout << '\n';
 	}
 
 	return 0;
