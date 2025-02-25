@@ -1,8 +1,10 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-const int arrSize = 101;
-char arr[arrSize];
+int result = 0;
+string alpha[8] = { "c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z=" };
+string s;
 
 int main()
 {
@@ -10,17 +12,22 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	cin.getline(arr, arrSize);
+	getline(cin, s);
 
-	int cnt = 0;
-	int index = 0;
-	while (1)
+	// string 함수 정리해두기
+
+	for (int i = 0; i < 8; i++)
 	{
-		if (arr[index] == '\0') break;
-
-
-		cnt++;
+		int start = 0;
+		while (start < s.size() - 1 && s.find(alpha[i], start) != string::npos)
+		{
+			start = s.find(alpha[i], start);
+			s.erase(start, alpha[i].size());
+			s.insert(start, "A");
+		}
 	}
+
+	cout << s.size();
 
 	return 0;
 }

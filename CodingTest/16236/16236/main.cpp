@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <list>
 #include <vector>
 #include <algorithm>
@@ -126,13 +126,13 @@ int main()
 				for (int i = 0; i < points.size(); i++)
 				{
 					int item = map[points[i].second][points[i].first];
-					if (item != 9 && item > sharkSize) continue; // --> 9´Â ½ÃÀÛÁ¡ÀÌ±â ¶§¹®¿¡ »©¾ßÇÑ´Ù.
+					if (item != 9 && item > sharkSize) continue; // --> 9ëŠ” ì‹œì‘ì ì´ê¸° ë•Œë¬¸ì— ë¹¼ì•¼í•œë‹¤.
 
 					if (visit[points[i].second][points[i].first] == true) continue;
 
 					visit[points[i].second][points[i].first] = true;
 
-					if (alreadyVisit[points[i].second][points[i].first] == false)
+					if (alreadyVisit[points[i].second][points[i].first] == false) // --> ì´ë¯¸ ë°©ë¬¸í•œ ì§€ì ì€ ë¹¼ì•¼í•œë‹¤.
 					{
 						if (item > 0 && item < sharkSize)
 						{
@@ -150,7 +150,7 @@ int main()
 			if (eatPos.size() > 0) break;
 		}
 
-		// ÀÌ °æ¿ì´Â queue¿¡ ¿ø¼Ò°¡ ¾ø´Â °æ¿ìÀÓ
+		// ì´ ê²½ìš°ëŠ” queueì— ì›ì†Œê°€ ì—†ëŠ” ê²½ìš°ì„
 		if (queue.IsEmpty() && eatPos.size() == 0) break;
 
 		time += currentMoveTime;
