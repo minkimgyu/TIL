@@ -1,60 +1,62 @@
 #include <iostream>
-#include <list>
-#include <vector>
+#include <string>
+#include <queue>
 using namespace std;
 
-template <typename T>
-class Queue
-{
-public:
-	void Push(T item)
-	{
-		_list.push_back(item);
-	}
-
-	void Pop()
-	{
-		_list.pop_front();
-	}
-
-	int Size()
-	{
-		return _list.size();
-	}
-
-	bool IsEmpty()
-	{
-		return Size() == 0;
-	}
-
-	T Front()
-	{
-		return _list.front();
-	}
-
-private:
-	list<T> _list;
-};
-
-const int mapSize = 100;
-int map[mapSize][mapSize]{0};
-bool visit[mapSize][mapSize]{false};
+int n;
+const int maxSize = 105;
+char map[maxSize][maxSize];
+char rgMap[maxSize][maxSize];
 
 const int offsetSize = 4;
-pair<int, int> offset[offsetSize] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
-
-vector<pair<int, int>> ReturnClosePoints(pair<int, int> pos, int n)
+pair<int, int> offsets[4] =
 {
-	vector<pair<int, int>> points;
-	for (int i = 0; i < offsetSize; i++)
-	{
-		pair<int, int> point = { pos.first + offset[i].first, pos.second + offset[i].second };
-		if (point.first < 0 || point.first >= n || point.second < 0 || point.second >= n) continue;
+	{0, 1},
+	{0, -1},
+	{1, 0},
+	{-1, 0}
+};
 
-		points.push_back(point);
+int bfs(char map[maxSize][maxSize])
+{
+	int count = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (map[i][j] == 'C') continue;
+
+			count += 1;
+			char currentChar = map[i][j];
+
+			queue<pair<int, int>> qu;
+			map[i][j] = 'C';
+			qu.push({ i, j });
+
+			while (qu.empty() == false)
+			{
+				pair<int, int> front = qu.front();
+				qu.pop();
+
+				for (int k = 0; k < offsetSize; k++)
+				{
+					pair<int, int> point;
+					point.first = front.first + offsets[k].first;
+					point.second = front.second + offsets[k].second;
+
+					if (point.first < 0 || point.second < 0 || point.first >= n || point.second >= n) continue;
+					if (currentChar == map[point.first][point.second])
+					{
+						map[point.first][point.second] = 'C';
+						qu.push(point);
+					}
+				}
+			}
+		}
 	}
 
-	return points;
+	return count;
 }
 
 int main()
@@ -63,110 +65,23 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	int n;
 	cin >> n;
 	cin.ignore();
 
 	for (int i = 0; i < n; i++)
 	{
-		char line[101];
-		cin.getline(line, n + 1);
-
+		string line;
+		getline(cin, line);
 		for (int j = 0; j < n; j++)
 		{
-			int item = (int)line[j] - 65;
-			map[i][j] = item;
+			map[i][j] = line[j];
+			if (line[j] == 'G') rgMap[i][j] = 'R';
+			else rgMap[i][j] = line[j];
 		}
 	}
 
-	int normalCnt = 0;
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			if (visit[i][j] == true) continue;
-
-			int item = map[i][j];
-			normalCnt++;
-
-			Queue<pair<int, int>> queue;
-			queue.Push({ i, j });
-			visit[i][j] = true;
-
-			while (queue.IsEmpty() == false)
-			{
-				pair<int, int> pos = queue.Front();
-				queue.Pop();
-
-				vector<pair<int, int>> points = ReturnClosePoints(pos, n);
-				int pointSize = points.size();
-
-				for (int z = 0; z < pointSize; z++)
-				{
-					if (map[points[z].first][points[z].second] != item) continue;
-
-					if (visit[points[z].first][points[z].second] == true) continue;
-
-					visit[points[z].first][points[z].second] = true;
-					queue.Push(points[z]);
-				}
-			}
-
-		}
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			visit[i][j] = false;
-		}
-	}
-
-	int notNormalCnt = 0;
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			if (visit[i][j] == true) continue;
-
-			int item = map[i][j];
-			if (item == 17) item = 6; // R이면 G 취급해준다.
-
-			notNormalCnt++;
-
-			Queue<pair<int, int>> queue;
-			queue.Push({ i, j });
-			visit[i][j] = true;
-
-			while (queue.IsEmpty() == false)
-			{
-				pair<int, int> pos = queue.Front();
-				queue.Pop();
-
-				vector<pair<int, int>> points = ReturnClosePoints(pos, n);
-				int pointSize = points.size();
-
-				for (int z = 0; z < pointSize; z++)
-				{
-					int value = map[points[z].first][points[z].second];
-					if (value == 17) value = 6; // R이면 G 취급해준다.
-
-					if (value != item) continue;
-
-					if (visit[points[z].first][points[z].second] == true) continue;
-
-					visit[points[z].first][points[z].second] = true;
-					queue.Push(points[z]);
-				}
-			}
-
-		}
-	}
-
-	cout << normalCnt << " " << notNormalCnt;
+	cout << bfs(map) << '\n';
+	cout << bfs(rgMap);
 
 	return 0;
 }

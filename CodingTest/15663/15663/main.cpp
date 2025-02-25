@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+<<<<<<< HEAD
 using namespace std;
 
 int n, m;
@@ -21,10 +22,31 @@ void dfs(int count)
 			if (i != m - 1) cout << " ";
 		}
 
+=======
+#include <vector>
+using namespace std;
+
+int n, m;
+int arr[10];
+int items[10];
+
+bool visit[10][10000];
+
+void dfs(int cnt)
+{
+	if (cnt == m)
+	{
+		for (int i = 0; i < m; i++)
+		{
+			cout << arr[i];
+			if (i != m - 1) cout << " ";
+		}
+>>>>>>> origin/main
 		cout << '\n';
 	}
 	else
 	{
+<<<<<<< HEAD
 
 		int item = 0; 
 		// 이런 식으로 바로 직전 값과 비교할 수 있는 값을 만들어서 실행할 수 없게 함
@@ -38,12 +60,35 @@ void dfs(int count)
 			item = arr[count] = inputArr[i];
 			dfs(count + 1);
 			visit[i] = false;
+=======
+		for (int i = 0; i < n; i++)
+		{
+			int item = items[i];
+			bool canSkip = true;
+
+			arr[cnt] = item;
+
+			for (int j = 0; j <= cnt; j++)
+			{
+				if (visit[j][arr[j]] == false)
+				{
+					canSkip = false;
+					break;
+				}
+			}
+
+			if (canSkip == true) continue;
+
+			visit[cnt][item] = true;
+			dfs(cnt + 1);
+>>>>>>> origin/main
 		}
 	}
 }
 
 int main()
 {
+<<<<<<< HEAD
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
@@ -57,5 +102,17 @@ int main()
 	sort(inputArr, inputArr + n);
 	dfs(0);
 
+=======
+	cin >> n >> m;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> items[i];
+	}
+
+	sort(items, items + n);
+
+	dfs(0);
+	
+>>>>>>> origin/main
 	return 0;
 }
