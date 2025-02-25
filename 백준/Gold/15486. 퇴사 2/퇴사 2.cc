@@ -1,8 +1,9 @@
 #include <iostream>
 using namespace std;
 
-pair<int, int> arr[1500051];
-int dp[1500051];
+const int maxSize = 1500000 + 100;
+pair<int, int> arr[maxSize];
+int dp[maxSize];
 
 int main()
 {
@@ -12,26 +13,23 @@ int main()
 
 	int n;
 	cin >> n;
-	for (int i = 0; i < n; i++)
+
+	for (int i = 1; i <= n; i++)
 	{
 		cin >> arr[i].first >> arr[i].second;
 	}
 
-	int result = 0;
-
-	for (int i = 0; i < n; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		dp[i + 1] = max(dp[i + 1], dp[i]);
-		if (i + 1 <= n)
-		{
-			result = max(result, dp[i + 1]);
-		}
-
 		dp[i + arr[i].first] = max(dp[i + arr[i].first], dp[i] + arr[i].second);
-		if (i + arr[i].first <= n)
-		{
-			result = max(result, dp[i + arr[i].first]);
-		}
+	}
+
+	int result = 0;
+
+	for (int i = 1; i <= n + 1; i++)
+	{
+		result = max(result, dp[i]);
 	}
 
 	cout << result;
