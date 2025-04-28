@@ -1,41 +1,56 @@
 #include <iostream>
 using namespace std;
 
-long long int dp[10][100];
+const int maxSize = 101;
+int dp[maxSize][10];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	int n;
 	cin >> n;
 
-	for (int i = 1; i < 10; i++)
-	{
-		dp[i][0] = 1;
-	}
+	dp[1][1] = 1;
+	dp[1][2] = 1;
+	dp[1][3] = 1;
+	dp[1][4] = 1;
+	dp[1][5] = 1;
+	dp[1][6] = 1;
+	dp[1][7] = 1;
+	dp[1][8] = 1;
+	dp[1][9] = 1;
 
-	for (int i = 1; i < n; i++)
+	for (int i = 2; i <= n; i++)
 	{
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j <= 9; j++)
 		{
-			int min = j - 1;
-			int max = j + 1;
-
-			int item = dp[j][i - 1] % 1000000000;
-			
-			if (min >= 0) dp[min][i] += item;
-			if (max <= 9) dp[max][i] += item;
+			if (j == 0)
+			{
+				dp[i][j + 1] += dp[i - 1][j] % 1000000000;
+			}
+			else if (j == 9)
+			{
+				dp[i][j - 1] += dp[i - 1][j] % 1000000000;
+			}
+			else
+			{
+				dp[i][j - 1] += dp[i - 1][j] % 1000000000;
+				dp[i][j + 1] += dp[i - 1][j] % 1000000000;
+			}
 		}
 	}
 
-	long long int result = 0;
-	for (int i = 0; i < 10; i++)
+	long long int sum = 0;
+	for (int i = 0; i <= 9; i++)
 	{
-		result += dp[i][n - 1];
+		sum += dp[n][i];
 	}
 
-	result %= 1000000000;
+	sum %= 1000000000; // 최종 값에 1000000000로 나눈 나머지를 구해야한다.
 
-	cout << result;
-
+	cout << sum;
 	return 0;
 }
