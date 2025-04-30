@@ -1,10 +1,8 @@
 #include <iostream>
 using namespace std;
 
-int MOD = 15746;
-const int maxSize = 1000001;
+const int maxSize = 1000000 + 5;
 int dp[maxSize];
-
 
 int main()
 {
@@ -17,10 +15,11 @@ int main()
 
 	dp[1] = 1;
 	dp[2] = 2;
+	dp[3] = 3;
 
-	for (int i = 3; i <= n; i++)
+	for (int i = 4; i <= n; i++)
 	{
-		dp[i] = (dp[i - 1] + dp[i - 2]) % MOD;
+		dp[i] = (dp[i - 1] + dp[i - 2]) % 15746;
 	}
 
 	cout << dp[n];
