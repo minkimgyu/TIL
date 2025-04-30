@@ -1,73 +1,91 @@
 #include <iostream>
 #include <algorithm>
-#include <string>
-#include <vector>
 using namespace std;
 
-const int colSize = 3;
-int arr[100000][colSize];
-int dp[100000][colSize];
-
-const int offsetSize = 4;
-pair<int, int> offsets[offsetSize] =
-{
-	{0, 1},
-	{1, 1},
-	{1, 0},
-	{1, -1},
-};
-
-vector<int> result;
+const int maxSize = 100000 + 5;
+int arr[maxSize][3];
+int dp[maxSize][3];
 
 int main()
 {
-	int outIndex = 0;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	while (1)
+	int loopCount = 0;
+
+	while(1)
 	{
 		int n;
 		cin >> n;
+
+		loopCount++;
 		if (n == 0) break;
+
+		for (int i = 0; i < maxSize; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				arr[i][j] = 0;
+				dp[i][j] = 1000000;
+			}
+		}
 
 		for (int i = 0; i < n; i++)
 		{
-			cin >> arr[i][0] >> arr[i][1] >> arr[i][2];
-
-			dp[i][0] = 1000001;
-			dp[i][1] = 1000001;
-			dp[i][2] = 1000001;
+			for (int j = 0; j < 3; j++)
+			{
+				cin >> arr[i][j];
+				dp[i][j] = 1000000;
+			}
 		}
 
 		dp[0][1] = arr[0][1];
 
 		for (int i = 0; i < n; i++)
 		{
-			for (int j = 0; j < colSize; j++)
+			for (int j = 0; j < 3; j++)
 			{
-				for (int k = 0; k < offsetSize; k++)
+				if (i == 0)
 				{
-					int r = i + offsets[k].first;
-					int c = j + offsets[k].second;
-
-					if (r < 0 || r >= n || c < 0 || c >= colSize) continue;
-					dp[r][c] = min(dp[r][c], dp[i][j] + arr[r][c]);
+					if (j == 1)
+					{
+						dp[i][2] = min(dp[i][2], dp[i][1] + arr[i][2]);
+						dp[i + 1][2] = min(dp[i + 1][2], dp[i][1] + arr[i + 1][2]);
+						dp[i + 1][1] = min(dp[i + 1][1], dp[i][1] + arr[i + 1][1]);
+						dp[i + 1][0] = min(dp[i + 1][0], dp[i][1] + arr[i + 1][0]);
+					}
+					else if (j == 2)
+					{
+						dp[i + 1][2] = min(dp[i + 1][2], dp[i][2] + arr[i + 1][2]);
+						dp[i + 1][1] = min(dp[i + 1][1], dp[i][2] + arr[i + 1][1]);
+					}
+				}
+				else
+				{
+					if (j == 0)
+					{
+						dp[i][1] = min(dp[i][1], dp[i][0] + arr[i][1]);
+						dp[i + 1][1] = min(dp[i + 1][1], dp[i][0] + arr[i + 1][1]);
+						dp[i + 1][0] = min(dp[i + 1][0], dp[i][0] + arr[i + 1][0]);
+					}
+					else if (j == 1)
+					{
+						dp[i][2] = min(dp[i][2], dp[i][1] + arr[i][2]);
+						dp[i + 1][2] = min(dp[i + 1][2], dp[i][1] + arr[i + 1][2]);
+						dp[i + 1][1] = min(dp[i + 1][1], dp[i][1] + arr[i + 1][1]);
+						dp[i + 1][0] = min(dp[i + 1][0], dp[i][1] + arr[i + 1][0]);
+					}
+					else if (j == 2)
+					{
+						dp[i + 1][2] = min(dp[i + 1][2], dp[i][2] + arr[i + 1][2]);
+						dp[i + 1][1] = min(dp[i + 1][1], dp[i][2] + arr[i + 1][1]);
+					}
 				}
 			}
 		}
 
-		result.push_back(dp[n - 1][1]);
-	}
-
-	string colma = ". ";
-
-	int resultSize = result.size();
-	for (int i = 0; i < resultSize; i++)
-	{
-		cout << i + 1;
-		cout << colma;
-		cout << result[i];
-
-		if (i != resultSize - 1) cout << '\n';
+		cout << loopCount << ". " << dp[n - 1][1] << '\n';
 	}
 	
 	return 0;
