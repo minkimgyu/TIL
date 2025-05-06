@@ -39,6 +39,7 @@ int main()
 
 	start = 0;
 	end = t;
+	// 시작이 0, 끝 4
 
 	sum1[0] = sum[0];
 	for (int i = 1; i <= maxEnd; i++)
@@ -59,9 +60,9 @@ int main()
 		int two = i;
 
 		maxSum += sum1[two] - sum1[one];
-		if (maxResult < maxSum) // maxSum이 더 큰 경우
+		if (maxResult < maxSum)
 		{
-			maxResult = maxSum; // 업데이트
+			maxResult = maxSum;
 			start = one + 1;
 			end = two + 1;
 		}
