@@ -1,73 +1,69 @@
+// 23295.cpp : This file contains the 'main' function. Program execution begins and ends there.
+    //
+
 #include <iostream>
 #include <vector>
 using namespace std;
 
-const int maxSize = 100000 + 5;
-int sum[maxSize];
-
-int sum1[maxSize];
+int N, T;
+vector<int> sums(100002);
+int endOfTime;
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-	int n, t;
-	cin >> n >> t;
+    cin >> N >> T;
 
-	int maxEnd = 0;
+    for (int i = 0; i < N; ++i) {
+        int timeCnt;
+        cin >> timeCnt;
 
-	for (int i = 0; i < n; i++)
-	{
-		int timeCount;
-		cin >> timeCount;
+        for (int j = 0; j < timeCnt; ++j) {
 
-		for (int j = 0; j < timeCount; j++)
-		{
-			int start, end;
-			cin >> start >> end;
+            int start, end;
+            cin >> start >> end;
 
-			maxEnd = max(maxEnd, end);
-			sum[start] += 1;
-			sum[end] -= 1;
-		}
-	}
+            sums[start] += 1;
+            sums[end] -= 1;
 
-	int maxSum = 0;
-	int start, end;
+            endOfTime = max(endOfTime, end);
+        }
+    }
 
-	start = 0;
-	end = t;
-	// 시작이 0, 끝 4
+    for (int i = 1; i <= endOfTime; ++i) {
+        sums[i] = sums[i - 1] + sums[i];
+    }
 
-	sum1[0] = sum[0];
-	for (int i = 1; i <= maxEnd; i++)
-	{
-		sum1[i] = sum1[i - 1] + sum[i];
-	}
+    int left = 0;
+    int right = T - 1;
+    int maxSum = 0;
+    pair<int, int> maxSection;
+    int sum = 0;
 
-	for (int i = 0; i < t; i++)
-	{
-		maxSum += sum1[i];
-	}
+    for (int i = 0; i < T; ++i) {
+        sum += sums[i];
+    }
 
-	int maxResult = maxSum;
+    maxSum = sum;
+    maxSection.first = left;
+    maxSection.second = right + 1;
 
-	for (int i = t; i <= maxEnd; i++)
-	{
-		int one = i - t;
-		int two = i;
+    while (right + 1 <= endOfTime) {
+        sum -= sums[left];
+        ++left;
+        ++right;
+        sum += sums[right];
 
-		maxSum += sum1[two] - sum1[one];
-		if (maxResult < maxSum)
-		{
-			maxResult = maxSum;
-			start = one + 1;
-			end = two + 1;
-		}
-	}
+        if (maxSum < sum) {
+            maxSum = sum;
+            maxSection = make_pair(left, right + 1);
+        }
+    }
 
-	cout << start << " " << end;
-	return 0;
+    cout << maxSection.first << " " << maxSection.second;
+
+    return 0;
 }
