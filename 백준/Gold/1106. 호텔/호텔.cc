@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-const int maxPeople = 1000 + 105;
+const int maxPeople = 1000 + 99;
 int dp[maxPeople];
 
 pair<int, int> city[20 + 5];
