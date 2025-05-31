@@ -15,7 +15,7 @@ bool haveIndegree[maxNSize];
 int results[maxNSize][maxNSize];
 bool visits[maxNSize];
 
-priority_queue<int, vector<int>, greater<int>> pQ;
+queue<int> pQ;
 
 int main()
 {
@@ -47,7 +47,7 @@ int main()
 
 	while (pQ.empty() == false)
 	{
-		int top = pQ.top(); pQ.pop();
+		int top = pQ.front(); pQ.pop();
 
 		for (int i = 0; i < connections[top].size(); i++)
 		{
