@@ -20,7 +20,7 @@ int dfs(int start, int end)
 		return dp[start][end];
 	}
 
-	int minValue = INT_MAX - 1;
+	int minValue = INT_MAX;
 
 	for (int i = start; i < end; i++)
 	{
