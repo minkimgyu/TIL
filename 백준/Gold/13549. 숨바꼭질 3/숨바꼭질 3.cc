@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <deque>
 using namespace std;
 
 const int maxSize = 100000 + 5;
@@ -20,41 +20,31 @@ int main()
 		return 0;
 	}
 
-	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-	q.push({ 0, n });
+	deque<pair<int, int>> q;
+	q.push_back({ 0, n });
 
-	timeArr[n] = 0;
 	for (int i = 0; i < maxSize; i++) timeArr[i] = maxSize;
 
 	while (q.empty() == false)
 	{
-		pair<int, int> top = q.top(); q.pop();
+		pair<int, int> top = q.front(); q.pop_front();
 
-		if (top.second + 1 < maxSize)
+		if (top.second * 2 < maxSize && timeArr[top.second * 2] > top.first)
 		{
-			if (timeArr[top.second + 1] > top.first + 1)
-			{
-				timeArr[top.second + 1] = top.first + 1;
-				q.push({ top.first + 1, top.second + 1 });
-			}
+			timeArr[top.second * 2] = top.first;
+			q.push_front({ top.first, top.second * 2 });
 		}
 
-		if (top.second - 1 >= 0)
+		if (top.second - 1 >= 0 && timeArr[top.second - 1] > top.first + 1)
 		{
-			if (timeArr[top.second - 1] > top.first + 1)
-			{
-				timeArr[top.second - 1] = top.first + 1;
-				q.push({ top.first + 1, top.second - 1 });
-			}
+			timeArr[top.second - 1] = top.first + 1;
+			q.push_back({ top.first + 1, top.second - 1 });
 		}
 
-		if (top.second * 2 < maxSize)
+		if (top.second + 1 < maxSize && timeArr[top.second + 1] > top.first + 1)
 		{
-			if (timeArr[top.second * 2] > top.first)
-			{
-				timeArr[top.second * 2] = top.first;
-				q.push({ top.first, top.second * 2 });
-			}
+			timeArr[top.second + 1] = top.first + 1;
+			q.push_back({ top.first + 1, top.second + 1 });
 		}
 	}
 
