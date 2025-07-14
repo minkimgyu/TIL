@@ -10,24 +10,24 @@ int dp[maxStudySize][maxTimeSize];
 
 int n, k;
 
-int dfs(int count, int time)
-{
-	if (count == 0) return 0; // 끝에 도달한 경우 리턴
-	if (dp[count][time] != -1) return dp[count][time]; // 이미 계산한 경우
-
-	int left = 0;
-	int right = 0;
-
-	left = dfs(count - 1, time); // 선택하지 않는 경우
-
-	if (time - study[count - 1].second >= 0) // 시간이 0보다 같거나 큰 경우
-	{
-		right = dfs(count - 1, time - study[count - 1].second) + study[count - 1].first; // 선택한 경우
-	}
-
-	dp[count][time] = max(left, right);
-	return dp[count][time];
-}
+//int dfs(int count, int time)
+//{
+//	if (count == 0) return 0; // 끝에 도달한 경우 리턴
+//	if (dp[count][time] != -1) return dp[count][time]; // 이미 계산한 경우
+//
+//	int left = 0;
+//	int right = 0;
+//
+//	left = dfs(count - 1, time); // 선택하지 않는 경우
+//
+//	if (time - study[count - 1].second >= 0) // 시간이 0보다 같거나 큰 경우
+//	{
+//		right = dfs(count - 1, time - study[count - 1].second) + study[count - 1].first; // 선택한 경우
+//	}
+//
+//	dp[count][time] = max(left, right);
+//	return dp[count][time];
+//}
 
 int main()
 {
@@ -37,19 +37,31 @@ int main()
 
 	cin >> n >> k;
 
-	for (int i = 0; i <= k; i++)
-	{
-		for (int j = 0; j <= n; j++)
-		{
-			dp[i][j] = -1;
-		}
-	}
+	//for (int i = 0; i <= k; i++)
+	//{
+	//	for (int j = 0; j <= n; j++)
+	//	{
+	//		dp[i][j] = -1;
+	//	}
+	//}
 
-	for (int i = 0; i < k; i++)
+	for (int i = 1; i <= k; i++)
 	{
 		cin >> study[i].first >> study[i].second; // 중요도, 공부 시간
 	}
 
-	cout << dfs(k, n);
+	for (int i = 1; i <= k; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			if (j - study[i].second >= 0)
+				dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - study[i].second] + study[i].first);
+			else
+				dp[i][j] = dp[i - 1][j];
+		}
+	}
+
+	cout << dp[k][n];
+	//cout << dfs(k, n);
 	return 0;
 }
