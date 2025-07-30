@@ -1,5 +1,4 @@
 #include <iostream>
-#include <queue>
 using namespace std;
 
 const int maxSize = 100000 + 5;
@@ -21,25 +20,22 @@ int main()
 
 	int total = 0;
 	int result = -100 * 100000 - 5;
-	queue<int> q;
+	int right = -1;
 
-	for (int i = 0; i < n; i++)
+	for (int left = 0; left < n; left++)
 	{
-		if (q.size() < k)
+		while (right < n - 1 && right - left < k - 1)
 		{
-			q.push(arr[i]);
-			total += arr[i];
-		}
-		else if(q.size() == k)
-		{
-			total -= q.front();
-			q.pop();
-
-			q.push(arr[i]);
-			total += arr[i];
+			right++;
+			total += arr[right];
 		}
 
-		if (q.size() == k) result = max(result, total);
+		if (right - left == k - 1)
+		{
+			result = max(result, total);
+		}
+
+		total -= arr[left];
 	}
 
 	cout << result;
