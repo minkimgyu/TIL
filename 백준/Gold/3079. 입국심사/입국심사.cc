@@ -2,7 +2,7 @@
 using namespace std;
 
 const int maxSize = 100000;
-unsigned long long int arr[maxSize];
+long long int arr[maxSize];
 
 int main()
 {
@@ -10,10 +10,10 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	unsigned long long int n, m;
+	long long int n, m;
 	cin >> n >> m;
 
-	unsigned long long int maxTime = 0;
+	long long int maxTime = 0;
 
 	for (int i = 0; i < n; i++)
 	{
@@ -21,17 +21,18 @@ int main()
 		maxTime = max(maxTime, arr[i]);
 	}
 
-	unsigned long long int left = 1;
-	unsigned long long int right = maxTime * m;
+	long long int left = 1;
+	long long int right = maxTime * m;
 
 	while (left <= right)
 	{
-		unsigned long long int mid = (left + right) / 2;
+		long long int mid = (left + right) / 2;
 
-		unsigned long long int passCount = 0;
+		long long int passCount = 0;
 		for (int i = 0; i < n; i++)
 		{
 			passCount += mid / arr[i];
+			if (passCount > m) break;
 		}
 
 		if (passCount >= m) right = mid - 1;
