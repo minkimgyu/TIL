@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
 using namespace std;
 
 // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 
@@ -18,7 +17,7 @@ int makableAlphaCount = 0;
 const int maxCharCount = 5;
 const int maxAlphaCount = 26;
 
-map<int, int> pickArr;
+int pickArr[maxAlphaCount];
 int result = 0;
 
 void Pick(int idx, int count)
@@ -50,7 +49,7 @@ void Pick(int idx, int count)
 	{
 		for (int i = idx; i < maxAlphaCount; i++)
 		{
-			if(pickArr[i] != 0) continue; // 존재 한다면 진행하지 않음
+			if (pickArr[i] != 0) continue; // 존재 한다면 진행하지 않음
 
 			pickArr[i]++;
 			Pick(i + 1, count + 1);
