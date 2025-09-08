@@ -1,96 +1,89 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 using namespace std;
 
-const int maxSize = 1000 + 5;
-vector<int> input[maxSize];
-int inter[maxSize];
-bool clear[maxSize];
-int timeCost[maxSize];
+const int buildingCount = 1000 + 5;
 
-int dp[maxSize];
+int buildingCost[buildingCount];
+int indegree[buildingCount];
+
+const int maxCost = 1000 * 100000 + 5;
+
+int dp[buildingCount];
+
+const int connectionCount = 100000 + 5;
+vector<int> connections[connectionCount];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin.tie(NULL);
+	cout.tie(NULL);
 
 	int t;
 	cin >> t;
 
-	for (int z = 0; z < t; z++)
+	for (int i = 0; i < t; i++)
 	{
 		int n, k;
 		cin >> n >> k;
 
-		for (int i = 1; i <= n; i++)
+		// 초기화
+		for (int z = 1; z <= n; z++)
 		{
-			cin >> timeCost[i];
+			dp[z] = 0;
+			connections[z].clear();
+			indegree[z] = 0;
+			buildingCost[z] = 0;
 		}
 
-		for (int i = 0; i < k; i++)
+		for (int z = 1; z <= n; z++)
 		{
-			int start, end;
-			cin >> start >> end;
-			input[start].push_back(end);
-			inter[end]++;
+			cin >> buildingCost[z];
+		}
+
+		for (int j = 0; j < k; j++)
+		{
+			int x, y;
+			cin >> x >> y;
+
+			indegree[y]++;
+			connections[x].push_back(y);
 		}
 
 		int w;
 		cin >> w;
 
 		queue<int> q;
-		for (int i = 1; i <= n; i++)
+		for (int p = 1; p <= n; p++)
 		{
-			if (inter[i] == 0 && clear[i] == false)
+			if (indegree[p] == 0)
 			{
-				clear[i] = true;
-				q.push(i);
-				dp[i] = timeCost[i];
+				q.push(p);
+				dp[p] = buildingCost[p];
 			}
 		}
 
-		bool canClear = false;
-
 		while (q.empty() == false)
 		{
-			int index = q.front(); q.pop();
-			for (int j = 0; j < input[index].size(); j++)
-			{
-				inter[input[index][j]]--;
-				dp[input[index][j]] = max(dp[input[index][j]], dp[index] + timeCost[input[index][j]]); // max 값으로 초기화
-			}
+			int front = q.front();
+			q.pop();
 
-			if (index == w)
+			for (int a = 0; a < connections[front].size(); a++)
 			{
-				canClear = true;
-				break;
-			}
+				int nxt = connections[front][a];
+				int nxtCost = buildingCost[nxt];
 
-			for (int i = 1; i <= n; i++)
-			{
-				if (inter[i] == 0 && clear[i] == false)
-				{
-					clear[i] = true;
-					q.push(i);
-				}
+				dp[nxt] = max(dp[nxt], dp[front] + nxtCost);
+
+				indegree[nxt]--;
+				if (indegree[nxt] == 0) q.push(nxt);
 			}
 		}
 
 		cout << dp[w];
-		if (z != t - 1)
-		{
-			cout << '\n';
-			for (int i = 0; i < maxSize; i++)
-			{
-				input[i].clear();
-				inter[i] = 0;
-				clear[i] = false;
-				timeCost[i] = 0;
-				dp[i] = 0;
-			}
-		}
+		if (i != t - 1) cout << '\n';
 	}
 
 	return 0;
