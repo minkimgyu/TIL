@@ -1,31 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithm>
 using namespace std;
 
-const int currentSize = 20000;
-const int offset = 5;
+const int maxSize = 20000 + 5;
+int cost[maxSize];
 
-const int maxSize = currentSize + offset;
-
-// first는 인덱스, second는 값
-vector<pair<int, int>> adj[maxSize];
-bool visit[maxSize]; // 확정 목적으로 존재
-
-int result[maxSize];
-
-struct Compare
-{
-	bool operator()(pair<int, int> a, pair<int, int> b) const
-	{
-		if (a.second == b.second) return a.first > b.first;
-		return a.second > b.second;
-	}
-};
-
-// first는 인덱스, second는 값
-priority_queue<pair<int, int>, vector<pair<int, int>>, Compare> pQ;
+const int INF = 20000 * 10 + 5;
+vector<pair<int, int>> connections[maxSize];
 
 int main()
 {
@@ -33,57 +15,51 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	fill(result, result + maxSize, 2100000000);
-
 	int v, e;
 	cin >> v >> e;
 
-	int start;
-	cin >> start;
+	int k;
+	cin >> k;
 
 	for (int i = 0; i < e; i++)
 	{
-		int u, v, w;
-		cin >> u >> v >> w;
-		adj[u].push_back({ v, w });
+		int a, b, w;
+		cin >> a >> b >> w;
+		connections[a].push_back({w, b});
 	}
 
-	result[start] = 0;
-	pQ.push({ start, 0 });
+	for (int i = 1; i <= v; i++)
+	{
+		cost[i] = INF;
+	}
+
+	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pQ;
+	pQ.push({ 0, k });
+	cost[k] = 0;
 
 	while (pQ.empty() == false)
 	{
-		pair<int, int> front = pQ.top(); pQ.pop();
-		visit[front.first] = true;
+		pair<int, int> top = pQ.top(); pQ.pop();
 
-		int frontDistance = result[front.first];
-
-		for (int i = 0; i < adj[front.first].size(); i++)
+		for (int i = 0; i < connections[top.second].size(); i++)
 		{
-			pair<int, int> near = adj[front.first][i];
-			if (visit[near.first] == true) continue;
+			int nxtIdx = connections[top.second][i].second;
+			int nxtCost = top.first + connections[top.second][i].first;
 
-			int distance = frontDistance + near.second;
-			if (result[near.first] > distance)
+			if (cost[nxtIdx] > nxtCost)
 			{
-				result[near.first] = distance;
-				pQ.push({ near.first, distance });
+				cost[nxtIdx] = nxtCost;
+				pQ.push({ cost[nxtIdx], nxtIdx });
 			}
 		}
 	}
 
 	for (int i = 1; i <= v; i++)
 	{
-		if (result[i] == 2100000000)
-		{
-			cout << "INF";
-		}
-		else
-		{
-			cout << result[i];
-		}
+		if (cost[i] == INF) cout << "INF";
+		else cout << cost[i];
 
-		if (i != currentSize) cout << '\n';
+		if(i != v) cout << '\n';
 	}
 
 	return 0;
