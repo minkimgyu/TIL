@@ -11,7 +11,7 @@ vector<pair<int, int>> connections[maxSize];
 
 vector<int> targets;
 
-const int INF = 1000000000 + 5;
+const int INF = 2000 * 1000 + 5;
 
 bool visits1[maxSize];
 bool visits2[maxSize];
@@ -44,7 +44,7 @@ void dijkstra(int n, int start)
 			int nxtCost = connections[currentIdx][i].first;
 
 			int cost = nxtCost + currentCost;
-			if (costs1[nxtIdx] >= cost)
+			if (costs1[nxtIdx] > cost)
 			{
 				costs1[nxtIdx] = cost;
 				pQ.push({ cost, nxtIdx });
@@ -81,7 +81,7 @@ void dijkstra1(int n, int start)
 			int nxtCost = connections[currentIdx][i].first;
 
 			int cost = nxtCost + currentCost;
-			if (costs2[nxtIdx] >= cost)
+			if (costs2[nxtIdx] > cost)
 			{
 				costs2[nxtIdx] = cost;
 				pQ.push({ cost, nxtIdx });
