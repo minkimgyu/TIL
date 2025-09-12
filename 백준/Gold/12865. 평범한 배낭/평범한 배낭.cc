@@ -1,26 +1,11 @@
 #include <iostream>
 using namespace std;
 
-const int maxSize = 100;
+const int maxSize = 100 + 5;
+const int maxWeight = 100000 + 5;
 pair<int, int> arr[maxSize];
 
-int dp[100 + 5][100000 + 5];
-
-int knapseck(int i, int w)
-{
-	if (i <= 0 || w <= 0) return 0;
-
-	if (arr[i].first > w)
-	{
-		return knapseck(i - 1, w);
-	}
-	else
-	{
-		int left = knapseck(i - 1, w);
-		int right = knapseck(i - 1, w - arr[i].first);
-		return max(left, arr[i].second + right);
-	}
-}
+int dp[maxSize][maxWeight];
 
 int main()
 {
@@ -33,28 +18,35 @@ int main()
 
 	for (int i = 1; i <= n; i++)
 	{
-		int w, v;
-		cin >> w >> v;
-
-		arr[i].first = w; // weight
-		arr[i].second = v; // value
+		cin >> arr[i].first >> arr[i].second;
 	}
 
 	for (int i = 1; i <= n; i++)
 	{
-		for (int w = 1; w <= k; w++)
+		for (int j = 1; j <= k; j++)
 		{
-			if (arr[i].first > w)
+			if (j >= arr[i].first)
 			{
-				dp[i][w] = dp[i - 1][w];
+				dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - arr[i].first] + arr[i].second);
 			}
 			else
 			{
-				dp[i][w] = max(dp[i - 1][w], arr[i].second + dp[i - 1][w - arr[i].first]);
+				dp[i][j] = dp[i - 1][j];
 			}
 		}
 	}
 
 	cout << dp[n][k];
+
+	/*int result = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= k; j++)
+		{
+			result = max(result, dp[i][j]);
+		}
+	}*/
+
+	//cout << result;
 	return 0;
 }
