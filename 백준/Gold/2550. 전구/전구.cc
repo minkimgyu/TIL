@@ -42,14 +42,14 @@ int main()
 
 	for (int i = 0; i < n; i++)
 	{
-		for (int j = 0; j < i; j++)
+		for (int j = i; j < n; j++)
 		{
-			if (order[arr[j]] < order[arr[i]])
+			if (order[arr[i]] < order[arr[j]])
 			{
-				if (dp[i] < dp[j] + 1)
+				if (dp[j] < dp[i] + 1)
 				{
-					dp[i] = dp[j] + 1;
-					trackArr[i] = j; // 역추적
+					dp[j] = dp[i] + 1;
+					trackArr[j] = i; // 역추적
 				}
 			}
 		}
@@ -66,7 +66,6 @@ int main()
 			maxIdx = i;
 		}
 	}
-
 
 	cout << result << '\n';
 	while (maxIdx != -1)
